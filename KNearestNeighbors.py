@@ -30,3 +30,9 @@ df = pd.read_csv('breast-cancer-wisconsin.data.txt')
 df.replace('?', -99999, inplace = True)
 df.drop(['id'], 1, inplace = True)
 
+
+newDataList = []
+for item in df:
+    newDataList.append(item)
+
+print(newDataList['clump_thickness'])
