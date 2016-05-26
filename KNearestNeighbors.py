@@ -5,6 +5,7 @@ import warnings
 from matplotlib import style
 import pandas as pd
 from collections import Counter
+import data
 
 style.use('fivethirtyeight')
 
@@ -29,17 +30,15 @@ def distance(point1, point2):
 df = pd.read_csv('breast-cancer-wisconsin.data.txt')
 df.replace('?', -99999, inplace = True)
 df.drop(['id'], 1, inplace = True)
+df.drop(['class'], 1, inplace = True)
 
-print(df['bare_nuclei'])
 cartesianList = []
 proxyList = []
-for index in range(len(df['class'])):
+for index in range(len(df['mitoses'])):
     for elem in df:
-        proxyList.append(df[elem][index])
+        proxyList.append(int(df[elem][index]))
     cartesianList.append(proxyList)
     proxyList = []
-
-print(cartesianList)
 
 def KNearestNeighbors(data, point, K):
     """
