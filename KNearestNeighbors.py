@@ -5,7 +5,7 @@ import warnings
 from matplotlib import style
 import pandas as pd
 from collections import Counter
-import data
+
 
 style.use('fivethirtyeight')
 
@@ -30,15 +30,26 @@ def distance(point1, point2):
 df = pd.read_csv('breast-cancer-wisconsin.data.txt')
 df.replace('?', -99999, inplace = True)
 df.drop(['id'], 1, inplace = True)
-df.drop(['class'], 1, inplace = True)
 
-cartesianList = []
+cartesianListTrain = []
 proxyList = []
-for index in range(len(df['mitoses'])):
+for index in range(500):
     for elem in df:
         proxyList.append(int(df[elem][index]))
-    cartesianList.append(proxyList)
+    cartesianListTrain.append(proxyList)
     proxyList = []
+
+
+cartesianListTest = []
+proxyList = []
+for index in range(500, len(df['mitoses'])):
+    for elem in df:
+        proxyList.append(int(df[elem][index]))
+    cartesianListTest.append(proxyList)
+    proxyList = []
+
+def getClass(dataPoint):
+    return dataPoint[-1]
 
 def KNearestNeighbors(data, point, K):
     """
@@ -52,7 +63,7 @@ def KNearestNeighbors(data, point, K):
     count = 0
     closePointList = []
     while count < K:
-        closestDistance, closePoint = 0
+        closestDistance, closePoint = 0, 0
         for dataPoint in data:
             if closestDistance == 0:
                 closePoint, closestDistance = dataPoint, distance(dataPoint, point)
@@ -64,7 +75,7 @@ def KNearestNeighbors(data, point, K):
         count += 1
 
     #sort the list of close points by class, and return the class most prevalent in closePointList
-    classCount1, classCount2 = []
+    classCount1, classCount2 = [], []
     for index in range(len(closePointList)):
         if index == 0:
             classCount1.append(getClass(closePointList[0]))
@@ -78,3 +89,20 @@ def KNearestNeighbors(data, point, K):
         return classCount1[0]
     else:
         return classCount2[0]
+
+def testKNearest(cartesianListTest, cartesianListTrain):
+    """
+    :return: Accuracy of KNearestNeighbors predictions
+    """
+    predictionList = []
+    for elem in cartesianListTest:
+        predictionList.append(KNearestNeighbors(cartesianListTrain, elem, 3))
+
+    accuracyCount = 0
+    for index in range(len(cartesianListTest)):
+        if cartesianListTest[index][-1] != predictionList[index]:
+            accuracyCount += 1
+
+    return (len(cartesianListTest) - accuracyCount) / len(cartesianListTest)
+
+print(testKNearest(cartesianListTest, cartesianListTrain))
