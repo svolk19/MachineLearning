@@ -30,9 +30,16 @@ df = pd.read_csv('breast-cancer-wisconsin.data.txt')
 df.replace('?', -99999, inplace = True)
 df.drop(['id'], 1, inplace = True)
 
+print(df['bare_nuclei'])
 cartesianList = []
 proxyList = []
+for index in range(len(df['class'])):
+    for elem in df:
+        proxyList.append(df[elem][index])
+    cartesianList.append(proxyList)
+    proxyList = []
 
+print(cartesianList)
 
 def KNearestNeighbors(data, point, K):
     """

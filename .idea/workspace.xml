@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6dfb06d6-a058-4308-b209-c532a351e7e3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/KNearestNeighbors.py" afterPath="$PROJECT_DIR$/KNearestNeighbors.py" />
     </list>
     <ignored path="MachineLearning.iws" />
@@ -18,7 +17,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/MachineLearning$FirstTut.coverage" NAME="FirstTut Coverage Results" MODIFIED="1464115388088" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/MachineLearning$KNearestNeighbors.coverage" NAME="KNearestNeighbors Coverage Results" MODIFIED="1464280266081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MachineLearning$KNearestNeighbors.coverage" NAME="KNearestNeighbors Coverage Results" MODIFIED="1464281325354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MachineLearning$RegressionLinear.coverage" NAME="RegressionLinear Coverage Results" MODIFIED="1464276003727" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MachineLearning$KNNTutorial.coverage" NAME="KNNTutorial Coverage Results" MODIFIED="1464275926745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
@@ -79,12 +78,12 @@
       <file leaf-file-name="KNearestNeighbors.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/KNearestNeighbors.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="28" column="52" selection-start-line="28" selection-start-column="52" selection-end-line="28" selection-end-column="52" />
+            <state relative-caret-position="650">
+              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
                 <element signature="e#225#913#0" expanded="false" />
-                <element signature="e#1123#1435#1" expanded="false" />
+                <element signature="e#1324#1636#1" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -528,7 +527,14 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/KNearestNeighbors.py</url>
+          <line>30</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -579,7 +585,7 @@
           <folding>
             <element signature="e#0#11#0" expanded="true" />
             <element signature="e#225#913#0" expanded="false" />
-            <element signature="e#1123#1435#1" expanded="false" />
+            <element signature="e#1324#1636#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -653,12 +659,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/KNearestNeighbors.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="28" column="52" selection-start-line="28" selection-start-column="52" selection-end-line="28" selection-end-column="52" />
+        <state relative-caret-position="650">
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
             <element signature="e#225#913#0" expanded="false" />
-            <element signature="e#1123#1435#1" expanded="false" />
+            <element signature="e#1324#1636#1" expanded="false" />
           </folding>
         </state>
       </provider>
