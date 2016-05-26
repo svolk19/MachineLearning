@@ -30,6 +30,10 @@ df = pd.read_csv('breast-cancer-wisconsin.data.txt')
 df.replace('?', -99999, inplace = True)
 df.drop(['id'], 1, inplace = True)
 
+cartesianList = []
+proxyList = []
+
+
 def KNearestNeighbors(data, point, K):
     """
     :param data: a series of cartesian points with label
@@ -37,6 +41,8 @@ def KNearestNeighbors(data, point, K):
     :param K: the number of 'neighbor' points to compare 'point' to to predict point's class
     :return: the predicted class of point (an int--2 or 4)
     """
+
+    #find the K closest points in data to point
     count = 0
     closePointList = []
     while count < K:
@@ -51,30 +57,18 @@ def KNearestNeighbors(data, point, K):
         closePointList.append(closePoint)
         count += 1
 
+    #sort the list of close points by class, and return the class most prevalent in closePointList
+    classCount1, classCount2 = []
+    for index in range(len(closePointList)):
+        if index == 0:
+            classCount1.append(getClass(closePointList[0]))
+        elif getClass(closePointList[index]) == classCount1[0]:
+            classCount1.append(getClass(closePointList[index]))
+        else:
+            classCount2.append(getClass(closePointList[index]))
 
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
+    #return most prevalent class
+    if len(classCount1) > len(classCount2):
+        return classCount1[0]
+    else:
+        return classCount2[0]
