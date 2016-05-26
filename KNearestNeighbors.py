@@ -30,9 +30,51 @@ df = pd.read_csv('breast-cancer-wisconsin.data.txt')
 df.replace('?', -99999, inplace = True)
 df.drop(['id'], 1, inplace = True)
 
+def KNearestNeighbors(data, point, K):
+    """
+    :param data: a series of cartesian points with label
+    :param point: a cartesian point with the same number of dimensions as an object in data
+    :param K: the number of 'neighbor' points to compare 'point' to to predict point's class
+    :return: the predicted class of point (an int--2 or 4)
+    """
+    count = 0
+    closePointList = []
+    while count < K:
+        closestDistance, closePoint = 0
+        for dataPoint in data:
+            if closestDistance == 0:
+                closePoint, closestDistance = dataPoint, distance(dataPoint, point)
+            else:
+                newDistance = distance(dataPoint, point)
+                if newDistance < closestDistance:
+                    closestDistance, closePoint = newDistance, dataPoint
+        closePointList.append(closePoint)
+        count += 1
 
-newDataList = []
-for item in df:
-    newDataList.append(item)
 
-print(newDataList['clump_thickness'])
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
