@@ -101,7 +101,7 @@ def rSqr(regressionLine, data, m, b):
     #return the coefficient of determination (r squared)
     return 1.0 - totalRegDiff / totalAvgDiff
 
-def create_dataset(number, variance, step = 2, correlation = 'False'):
+def create_dataset(number, variance, step = 1, correlation = 'False'):
     """
     :param number: number of data points
     :param variance: maximum positive or negative difference
@@ -120,7 +120,7 @@ def create_dataset(number, variance, step = 2, correlation = 'False'):
             val -= step
     return data(dataList)
 
-dataSet = create_dataset(100, 20, correlation = 'pos')
+dataSet = create_dataset(100, 60, correlation = 'pos')
 plt.scatter(dataSet.getXList(), dataSet.getYList())
 
 m, b = LinearRegression(dataSet)
