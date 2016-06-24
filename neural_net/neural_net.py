@@ -1,7 +1,6 @@
 import numpy as np
 from scipy import optimize
 import matplotlib.pyplot as plt
-import rand_data_gen as data
 
 class neural_network(object):
     def __init__(self):
@@ -29,7 +28,6 @@ class neural_network(object):
         return 0.5 * sum((y - yHat) ** 2)
 
     def costFunctionPrime(self, X, y):
-        print(X, y)
         self.yHat = self.forward(X)
 
         delta3 = np.multiply(-(y - self.yHat),
@@ -102,16 +100,23 @@ class trainer(object):
         plt.grid(1)
         plt.show()
 
+import test_NN as tNN
 
-X = np.array([[5, 2], [4, 7], [8, 9]], dtype='float')
-y = np.array([72, 56, 81])
+X, y = tNN.createGravData()
+
+print('x values:', X, '\n\ny values:', y)
+
+
+X = X/np.amax(X, axis=0)
+y = y/np.amax(y, axis=0)
 
 NN = neural_network()
 
 T = trainer(NN)
 T.train(X, y)
-T.show()
-print(NN.forward(X), y)
+
+print('W1:', NN.w1, '\n\nW2:', NN.w2)
+
 
 
 
