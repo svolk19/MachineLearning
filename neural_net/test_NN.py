@@ -9,10 +9,10 @@ def createGravData():
     g = 9.80665
 
     #initialize an empty numpy array
-    X_dat = np.empty([50, 2])
+    X_dat = np.empty([100, 2])
 
     #fill array with random x values
-    for i in range(50):
+    for i in range(100):
         X_pair = np.random.randint(20, 100, 2)
         X_dat[i] = X_pair
 

@@ -88,7 +88,7 @@ class trainer(object):
 
         params0 = self.N.getParams()
 
-        options = {'maxiter': 200, 'disp' : True}
+        options = {'maxiter': 200, 'disp' : False}
         _res = optimize.minimize(self.costFunctionWrapper, params0, jac=True, method='BFGS', \
                                  args=(X, y), options=options, callback=self.callbackF)
 
@@ -103,21 +103,10 @@ class trainer(object):
 import test_NN as tNN
 
 X, y = tNN.createGravData()
-
-print('x values:', X, '\n\ny values:', y)
-
-
 X = X/np.amax(X, axis=0)
 y = y/np.amax(y, axis=0)
 
 NN = neural_network()
-
 T = trainer(NN)
-T.train(X, y)
-
-print('W1:', NN.w1, '\n\nW2:', NN.w2)
-
-
-
-
-
+accuracy = tNN.NN_accuracy(NN)
+print('training successful, accuracy: %f' %accuracy)
