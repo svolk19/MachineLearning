@@ -6,18 +6,22 @@ class neural_network(object):
     def __init__(self):
         self.inputLayerSize = 2
         self.outputLayerSize = 1
-        self.hiddenLayerSize = 3
-
+        self.hiddenLayerSize1 = 3
+        self.hiddenLayerSize2 = 3
         self.w1 = np.random.randn(self.inputLayerSize,
-                                  self.hiddenLayerSize)
-        self.w2 = np.random.randn(self.hiddenLayerSize,
+                                  self.hiddenLayerSize1)
+        self.w2 = np.random.randn(self.hiddenLayerSize1,
+                                  self.hiddenLayerSize2)
+        self.w3 = np.random.randn(self.hiddenLayerSize2,
                                   self.outputLayerSize)
 
     def forward(self, x):
         self.z2 = np.dot(x, self.w1)
         self.a2 = self.sigmoid(self.z2)
         self.z3 = np.dot(self.a2, self.w2)
-        yHat = self.sigmoid(self.z3)
+        self.a3 = self.sigmoid(self.z3)
+        self.z4 = np.dot(self.a3, self.w3)
+        yHat = self.sigmoid(self.z4)
         return yHat
 
     def sigmoid(self, z):
@@ -30,8 +34,12 @@ class neural_network(object):
     def costFunctionPrime(self, X, y):
         self.yHat = self.forward(X)
 
-        delta3 = np.multiply(-(y - self.yHat),
-                             self.sigmoidPrime(self.z3))
+        delta4 = np.multiply(-(y - self.yHat),
+                             self.sigmoidPrime(self.z4))
+
+        dJdW3 = np.dot(self.a3.T, delta4)
+
+        delta3 = np.dot(delta4, self.w3.T) * self.sigmoidPrime(self.z3)
 
         dJdW2 = np.dot(self.a2.T, delta3)
 
@@ -39,27 +47,29 @@ class neural_network(object):
 
         dJdW1 = np.dot(X.T, delta2)
 
-        return dJdW1, dJdW2
+        return dJdW1, dJdW2, dJdW3
 
     def sigmoidPrime(self, z):
         return np.exp(-z) / ((1 + np.exp(-z) ** 2))
 
     def getParams(self):
         # Get W1 and W2 unrolled into vector:
-        params = np.concatenate((self.w1.ravel(), self.w2.ravel()))
+        params = np.concatenate((self.w1.ravel(), self.w2.ravel(), self.w3.ravel()))
         return params
 
     def setParams(self, params):
-        # Set W1 and W2 using single paramater vector.
+        # Set W1, W2, and W3 using single paramater vector.
         W1_start = 0
-        W1_end = self.hiddenLayerSize * self.inputLayerSize
-        self.w1 = np.reshape(params[W1_start:W1_end], (self.inputLayerSize, self.hiddenLayerSize))
-        W2_end = W1_end + self.hiddenLayerSize * self.outputLayerSize
-        self.w2 = np.reshape(params[W1_end:W2_end], (self.hiddenLayerSize, self.outputLayerSize))
+        W1_end = self.hiddenLayerSize2 * self.inputLayerSize
+        self.w1 = np.reshape(params[W1_start:W1_end], (self.inputLayerSize, self.hiddenLayerSize1))
+        W2_end = W1_end + self.hiddenLayerSize1 * self.hiddenLayerSize2
+        self.w2 = np.reshape(params[W1_end:W2_end], (self.hiddenLayerSize1, self.hiddenLayerSize2))
+        W3_end = W2_end + self.hiddenLayerSize2 * self.outputLayerSize
+        self.w3 = np.reshape(params[W2_end:W3_end], (self.hiddenLayerSize2, self.outputLayerSize))
 
     def computeGradients(self, X, y):
-        dJdW1, dJdW2 = self.costFunctionPrime(X, y)
-        return np.concatenate((dJdW1.ravel(), dJdW2.ravel()))
+        dJdW1, dJdW2, dJdW3 = self.costFunctionPrime(X, y)
+        return np.concatenate((dJdW1.ravel(), dJdW2.ravel(), dJdW3.ravel()))
 
 
 class trainer(object):
@@ -88,7 +98,7 @@ class trainer(object):
 
         params0 = self.N.getParams()
 
-        options = {'maxiter': 200, 'disp' : False}
+        options = {'maxiter': 200, 'disp' : True}
         _res = optimize.minimize(self.costFunctionWrapper, params0, jac=True, method='BFGS', \
                                  args=(X, y), options=options, callback=self.callbackF)
 
@@ -102,16 +112,14 @@ class trainer(object):
 
 import test_NN as tNN
 
-
 X, y = tNN.createGravData()
 X = X/np.amax(X, axis=0)
 y = y/np.amax(y, axis=0)
 
 NN = neural_network()
 T = trainer(NN)
-
-accuracy = 0.0
-while accuracy < .96:
-    T.train(X, y)
-    accuracy = tNN.NN_accuracy(NN)
+T.train(X, y)
+accuracy = tNN.NN_accuracy(NN)
 print('training successful, accuracy: %f' %accuracy)
+
+T.show()
