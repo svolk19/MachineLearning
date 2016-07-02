@@ -109,9 +109,7 @@ y = y/np.amax(y, axis=0)
 
 NN = neural_network()
 T = trainer(NN)
+T.train(X, y)
 
-accuracy = 0.0
-while accuracy < .96:
-    T.train(X, y)
-    accuracy = tNN.NN_accuracy(NN)
-print('training successful, accuracy: %f' %accuracy)
+accuracy = test_NN.NN_accuracy(NN)
+print('accuracy: %f' %accuracy)

@@ -36,8 +36,7 @@ def NN_accuracy(NN):
 
     #find avg squared error
     errorArray = np.subtract(y, yHat)
-    pctError = np.divide(errorArray, y)
-    avgPctError = np.average(pctError)
 
-    return avgPctError
+    return np.sum(np.square(errorArray)) / np.sum(np.square(y))
 
+print(createGravData())

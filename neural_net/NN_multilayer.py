@@ -6,8 +6,8 @@ class neural_network(object):
     def __init__(self):
         self.inputLayerSize = 2
         self.outputLayerSize = 1
-        self.hiddenLayerSize1 = 3
-        self.hiddenLayerSize2 = 3
+        self.hiddenLayerSize1 = 5
+        self.hiddenLayerSize2 = 5
         self.w1 = np.random.randn(self.inputLayerSize,
                                   self.hiddenLayerSize1)
         self.w2 = np.random.randn(self.hiddenLayerSize1,
@@ -26,6 +26,10 @@ class neural_network(object):
 
     def sigmoid(self, z):
         return 1/(1 + np.exp(-z))
+
+    def tanh(self, z):
+        return np.tanh(z)
+
 
     def costFunction(self, X, y):
         yHat = self.forward(X)
@@ -51,6 +55,9 @@ class neural_network(object):
 
     def sigmoidPrime(self, z):
         return np.exp(-z) / ((1 + np.exp(-z) ** 2))
+
+    def tanhPrime(self, z):
+        return (2 / (np.exp(z) + np.exp(-z))) ** 2
 
     def getParams(self):
         # Get W1 and W2 unrolled into vector:
@@ -98,7 +105,7 @@ class trainer(object):
 
         params0 = self.N.getParams()
 
-        options = {'maxiter': 200, 'disp' : True}
+        options = {'maxiter': 200, 'disp' : False}
         _res = optimize.minimize(self.costFunctionWrapper, params0, jac=True, method='BFGS', \
                                  args=(X, y), options=options, callback=self.callbackF)
 
@@ -120,6 +127,5 @@ NN = neural_network()
 T = trainer(NN)
 T.train(X, y)
 accuracy = tNN.NN_accuracy(NN)
-print('training successful, accuracy: %f' %accuracy)
+print('accuracy: %f' %accuracy)
 
-T.show()
