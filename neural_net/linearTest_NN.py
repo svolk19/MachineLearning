@@ -18,12 +18,13 @@ def linearData(size=100):
 
     #calculate y value for each random X, and add it to a new array with corresponding indicies
     y_list = []
-
-    for i, X in enumerate(X_dat):
+    y_dat = np.zeros(size)
+    for X in X_dat:
         y = (X[1] * randM) + randB
         y_list.append(y)
 
-    y_dat = np.array(y_list)
+    for i in enumerate(y_list):
+        y_dat[i]
 
     return X_dat, y_dat
 

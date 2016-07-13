@@ -111,5 +111,5 @@ NN = neural_network()
 T = trainer(NN)
 T.train(X, y)
 
-accuracy = test_NN.NN_accuracy(NN)
+accuracy = tNN.NN_accuracy(NN)
 print('accuracy: %f' %accuracy)
