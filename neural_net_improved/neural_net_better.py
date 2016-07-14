@@ -51,12 +51,12 @@ class neural_network(object):
 
         return dJdW1, dJdW2, dJdW3
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False):
-        # neural net training
+    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, display=False):
 
+        # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
 
-            # # calculate gradients
+            # calculate gradients
             dJdw1, dJdw2, dJdw3 = self.backPropagate(X, y)
 
             # train w1, w2, and w3
@@ -74,6 +74,37 @@ class neural_network(object):
 
         if display:
             plt.show()
+
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False):
+        # neural net training
+
+        numPasses = 0
+        learnRate = learning_rate
+        testAccuracy = 0
+
+        while testAccuracy <= 0.95 and numPasses <= 15:
+
+            numPasses += 1
+
+            if numPasses % 3 == 0:
+                learnRate += 0.1
+                self.gradient_adjust(X, y, iterations=iterations, learning_rate=learnRate, display=display)
+
+            self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, display=display)
+
+            testAccuracy = self.accuracy(X, y)
+            print(testAccuracy)
+
+        if self.accuracy(X, y) < 0.95 and reinitialize:
+            # try a different random weighting
+            self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
+            self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
+            self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
+
+            self.train(X, y)
+
+        return 'accuracy:' + str(self.accuracy(X, y))
+
 
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net
@@ -97,9 +128,25 @@ class neural_network(object):
         return error
 
 
+def Xor():
+    # teach neural net Xor function
+    X = np.array(([0, 0], [0, 1], [1, 0], [1, 1]), dtype=float)
+    y = np.array(([0], [1], [1], [0]), dtype=float)
+
+    NN = neural_network()
+
+    print('accuracy before training: ' + str(NN.accuracy(X, y) * 100.0) + '%')
+
+    NN.train(X, y)
+
+    return NN.accuracy(X, y, string=True)
+
 
 
 def test():
+
+    # teaches neural net correlation between hours studied, hours slept and test score
+
     X = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
     y = np.array(([75], [82], [93]), dtype=float)
 
@@ -112,8 +159,15 @@ def test():
 
     NN.train(X, y)
 
-    print(NN.accuracy(X, y, string=True))
-
+    return NN.accuracy(X, y, string=True)
 
 if __name__ == '__main__':
+    # print('---------------------------\n\n' + 'test score predictor\n\n' + '---------------------------\n\n')
+    # test()
+    #
+    # print('---------------------------\n\n' + 'Xor calculator\n\n' + '---------------------------\n\n')
+    # Xor()
+    #
+    #
+
     test()
