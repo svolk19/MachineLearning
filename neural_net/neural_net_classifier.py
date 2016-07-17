@@ -9,8 +9,8 @@ class neural_network(object):
         # layer sizes
         self.inputSize = 4
         self.outputSize = 3
-        self.hidden1Size = 8
-        self.hidden2Size = 6
+        self.hidden1Size = 4
+        self.hidden2Size = 4
 
         # initialize random primary weight and bias scheme
         self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
@@ -37,35 +37,51 @@ class neural_network(object):
         else:
             for i, column in enumerate(X):
                 for j, elem in enumerate(column):
-                    X[i][j] = math.tanh(elem)
+                    X[i][j] = np.tanh(elem)
             return X
 
     def softmax(self, X):
 
         # activation for last set of neurons: the probabilistic normalizer
         # assumes X is a numpy array
-        return np.exp(X) / np.sum(np.exp(X), axis=0)
+        exp = np.exp(X)
+        expSum = np.sum(exp, axis=0)
+        return exp / expSum
 
     def predict(self, X):
 
         # feed forward data set X
         # assumes X is a numpy array, returns numpy array
-        self.z2 = np.dot(X, self.w1)
+        self.z2 = np.dot(X, self.w1) + self.b1
         self.a2 = self.sigmoid(self.z2)
-        self.z3 = np.dot(self.a2, self.w2)
+        self.z3 = np.dot(self.a2, self.w2) + self.b2
         self.a3 = self.sigmoid(self.z3)
-        self.z4 = np.dot(self.a3, self.w3)
-        self.a4 = self.softmax(self.z4)
-        return np.argmax(self.a4, axis=1)
+        self.z4 = np.dot(self.a3, self.w3) + self.b3
+        results = np.exp(self.z4)
+        probabilities = results / np.sum(results, axis=1, keepdims=True)
+        return np.argmax(probabilities, axis=1)
+
+    def forwardPropagate(self, X):
+
+        # feed forward data set X
+        # assumes X is a numpy array, returns numpy array
+        self.z2 = np.dot(X, self.w1) + self.b1
+        self.a2 = self.sigmoid(self.z2)
+        self.z3 = np.dot(self.a2, self.w2) + self.b2
+        self.a3 = self.sigmoid(self.z3)
+        self.z4 = np.dot(self.a3, self.w3) + self.b3
+        results = np.exp(self.z4)
+        probabilities = results / np.sum(results, axis=1, keepdims=True)
+        return probabilities
 
     def backPropagate(self, X, y):
 
         # backpropagation of value X
         num_examples = len(X)
-        delta4 = self.predict(X)
+        delta4 = self.forwardPropagate(X)
         delta4[range(num_examples), y] -= 1
         dJdW3 = np.dot(self.a3.T, delta4)
-        dJdB3 = np.sum(delta4, axis=0, keepdims=True)
+        dJdB3 = np.sum(delta4, axis=0)
         delta3 = np.dot(delta4, self.w3.T) * self.sigmoid(self.z3, deriv=True)
         dJdW2 = np.dot(self.a2.T, delta3)
         dJdB2 = np.sum(delta3, axis=0)
@@ -75,13 +91,13 @@ class neural_network(object):
 
         return dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3
 
-    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, regChange=0.01, display=False, regularize=False):
+    def gradient_adjust(self, X, y, iterations=5000, learning_rate=0.01, regChange=0.01, display=False, regularize=False):
 
         # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
 
             # calculate gradients
-            dJdw1, dJdw2, dJdw3, dJdB1, dJdB2, dJdB3 = self.backPropagate(X, y)
+            dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3 = self.backPropagate(X, y)
 
             # train weights and biases
 
@@ -90,23 +106,23 @@ class neural_network(object):
                 self.w2 += regChange * self.w2
                 self.w3 += regChange * self.w3
 
-            for i, deriv in enumerate(dJdw1):
-                self.w1[i] -= learning_rate * deriv
+            for i, deriv in enumerate(dJdW1):
+                self.w1[i] += -learning_rate * deriv
 
-            for i, deriv in enumerate(dJdw2):
-                self.w2[i] -= learning_rate * deriv
+            for i, deriv in enumerate(dJdW2):
+                self.w2[i] += -learning_rate * deriv
 
-            for i, deriv in enumerate(dJdw3):
-                self.w3[i] -= learning_rate * deriv
+            for i, deriv in enumerate(dJdW3):
+                self.w3[i] += -learning_rate * deriv
 
             for i, deriv in enumerate(dJdB1):
-                self.b1[i] -= learning_rate * deriv
+                self.b1[i] += -learning_rate * deriv
 
             for i, deriv in enumerate(dJdB2):
-                self.b2[i] -= learning_rate * deriv
+                self.b2[i] += -learning_rate * deriv
 
             for i, deriv in enumerate(dJdB3):
-                self.b3[i] -= learning_rate * deriv
+                self.b3[i] += -learning_rate * deriv
 
 
             if display:
@@ -115,97 +131,55 @@ class neural_network(object):
         if display:
             plt.show()
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, regChange=0.01, display=False,
+              regularize=False, reinitialize=False):
         # neural net training
 
-        numPasses = 0
-        learnRate = learning_rate
-        testAccuracy = 0
+        self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, regChange=regChange,
+                             display=display, regularize=regularize)
 
-        while testAccuracy <= 0.95 and numPasses <= 15:
-
-            numPasses += 1
-
-            if numPasses % 3 == 0:
-                learnRate += 0.1
-                self.gradient_adjust(X, y, iterations=iterations, learning_rate=learnRate, display=display)
-
-            self.gradient_adjust(X, y, iterations=iterations, learning_rate=learnRate, display=display)
-
-            testAccuracy = self.accuracy(X, y)
-            print(testAccuracy)
-
-        if self.accuracy(X, y) < 0.95 and reinitialize:
+        if reinitialize and self.accuracy(X, y) < 0.95:
             # try a different random weighting
             self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
             self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
             self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
-
+        
             self.train(X, y)
-
-        return 'accuracy:' + str(self.accuracy(X, y))
 
 
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net
+        errorCount = 0
         yhat = self.predict(X)
-        errorDifference = np.subtract(yhat, y)
-        error = np.absolute(np.divide(errorDifference, y))
-        print(error)
-        accuracy = 1.0 - np.average(error)
+        for i, elem in enumerate(yhat):
+            if elem != y[i]:
+                errorCount += 1
+
+        accuracy = 1.0 - errorCount / len(y)
 
         if string:
             print("accuracy: " + str(accuracy * 100.0) + "%")
         else:
             return accuracy
 
-    def error(self, X, y):
-        # produces the total squared error of neural net
-        error = 0.0
-        yHat = self.predict(X)
-        for i in range(len(yHat)):
-            error += (y[i] - yHat[i]) ** 2
 
-        return error
+def iris():
 
-
-def Xor():
-    # teach neural net Xor function
-    X = np.array(([0, 0], [0, 1], [1, 0], [1, 1]), dtype=float)
-    y = np.array(([0], [1], [1], [0]), dtype=float)
+    # iris test data classification problem from sklearn
+    from sklearn import datasets
+    from sklearn.cross_validation import train_test_split
+    data = datasets.load_iris()
+    X = data.data
+    y = data.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, test_size=0.3)
 
     NN = neural_network()
-
-    print('accuracy before training: ' + str(NN.accuracy(X, y) * 100.0) + '%')
-
-    NN.train(X, y)
-
-    return NN.accuracy(X, y, string=True)
-
-
-
-def test():
-
-    # teaches neural net correlation between hours studied, hours slept and test score
-
-    X = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
-    y = np.array(([75], [82], [93]), dtype=float)
-
-    X = X/np.amax(X)
-    y = y/100
-
-    NN = neural_network()
-
-    print('accuracy before training: ' + str(NN.accuracy(X, y) * 100.0) + '%')
-
-    NN.train(X, y)
-
-    return NN.accuracy(X, y, string=True)
+    print(NN.forwardPropagate(X_test))
+    NN.train(X_train, y_train, learning_rate=0.1, iterations=1000, display=True)
+    print(NN.forwardPropagate(X_test))
 
 if __name__ == '__main__':
-    print('---------------------------\n\n' + 'test score predictor\n\n' + '---------------------------\n\n')
-   test()
-
-
+    print('---------------------------\n\n' + 'iris classifier\n\n' + '---------------------------\n\n')
+    iris()
 
 
