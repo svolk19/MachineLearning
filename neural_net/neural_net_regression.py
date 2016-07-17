@@ -4,16 +4,28 @@ import matplotlib.pyplot as plt
 
 class neural_network(object):
     def __init__(self):
-        #layer sizes
+
+        # layer sizes
         self.inputSize = 2
         self.outputSize = 1
-        self.hidden1Size = 5
-        self.hidden2Size = 5
+        self.hidden1Size = 8
+        self.hidden2Size = 6
 
-        #initialize random primary weight scheme
+        # initialize random primary weight and bias scheme
         self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
         self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
         self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
+        self.b1 = np.zeros(self.hidden1Size)
+        self.b2 = np.zeros(self.hidden2Size)
+        self.b3 = np.zeros(self.outputSize)
+
+        # initialize forward propagation parameters to 0.0
+        self.z2 = 0.0
+        self.a2 = 0.0
+        self.z3 = 0.0
+        self.a3 = 0.0
+        self.z4 = 0.0
+        self.a4 = 0.0
 
     def sigmoid(self, X, deriv=False):
         # activation function at each neuron: tanh
@@ -38,28 +50,39 @@ class neural_network(object):
         return self.a4
 
     def backPropagate(self, X, y):
-        # backpropagation of value X
-        yhat = self.predict(X)
 
-        delta4 = np.multiply(-(y - yhat),
+        # backpropagation of value
+        self.yHat = self.predict(X)
+
+        delta4 = np.multiply(-(y - self.yHat),
                              self.sigmoid(self.z4, deriv=True))
         dJdW3 = np.dot(self.a3.T, delta4)
+        dJdB3 = np.sum(delta4, axis=0, keepdims=True)
         delta3 = np.dot(delta4, self.w3.T) * self.sigmoid(self.z3, deriv=True)
         dJdW2 = np.dot(self.a2.T, delta3)
+        dJdB2 = np.sum(delta3, axis=0)
         delta2 = np.dot(delta3, self.w2.T) * self.sigmoid(self.z2, deriv=True)
         dJdW1 = np.dot(X.T, delta2)
+        dJdB1 = np.sum(delta2, axis=0)
 
-        return dJdW1, dJdW2, dJdW3
+        return dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3
 
-    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, display=False):
+    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, regChange=0.01, display=False,
+                        regularize=False):
 
         # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
 
             # calculate gradients
-            dJdw1, dJdw2, dJdw3 = self.backPropagate(X, y)
+            dJdw1, dJdw2, dJdw3, dJdB1, dJdB2, dJdB3 = self.backPropagate(X, y)
 
-            # train w1, w2, and w3
+            # train weights and biases
+
+            if regularize:
+                self.w1 += regChange * self.w1
+                self.w2 += regChange * self.w2
+                self.w3 += regChange * self.w3
+
             for i, deriv in enumerate(dJdw1):
                 self.w1[i] -= learning_rate * deriv
 
@@ -68,6 +91,15 @@ class neural_network(object):
 
             for i, deriv in enumerate(dJdw3):
                 self.w3[i] -= learning_rate * deriv
+
+            for i, deriv in enumerate(dJdB1):
+                self.b1[i] -= learning_rate * deriv
+
+            for i, deriv in enumerate(dJdB2):
+                self.b2[i] -= learning_rate * deriv
+
+            for i, deriv in enumerate(dJdB3):
+                self.b3[i] -= learning_rate * deriv
 
             if display:
                 plt.scatter(num, self.accuracy(X, y))
@@ -162,12 +194,5 @@ def test():
     return NN.accuracy(X, y, string=True)
 
 if __name__ == '__main__':
-    # print('---------------------------\n\n' + 'test score predictor\n\n' + '---------------------------\n\n')
-    # test()
-    #
-    # print('---------------------------\n\n' + 'Xor calculator\n\n' + '---------------------------\n\n')
-    # Xor()
-    #
-    #
-
     test()
+

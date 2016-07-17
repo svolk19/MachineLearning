@@ -1,5 +1,5 @@
 from sklearn import datasets
-
+import numpy as np
 iris = datasets.load_iris()
 
 X = iris.data
@@ -14,8 +14,10 @@ my_classifier = KNeighborsClassifier()
 my_classifier.fit(X_train, y_train)
 
 predictions = my_classifier.predict(X_test)
+predictions = np.array(predictions)
+y_test = np.array(y_test)
 
-print(len(predictions))
+print(predictions, y_test)
 
 from sklearn.metrics import accuracy_score
 
