@@ -8,8 +8,8 @@ class neural_network(object):
         # layer sizes
         self.inputSize = 2
         self.outputSize = 1
-        self.hidden1Size = 8
-        self.hidden2Size = 6
+        self.hidden1Size = 3
+        self.hidden2Size = 3
 
         # initialize random primary weight and bias scheme
         self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
@@ -107,27 +107,13 @@ class neural_network(object):
         if display:
             plt.show()
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, regChange=0.01, regularize=False):
         # neural net training
 
-        numPasses = 0
-        learnRate = learning_rate
-        testAccuracy = 0
+        self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, regChange=regChange,
+                             display=display, regularize=regularize)
 
-        while testAccuracy <= 0.95 and numPasses <= 15:
-
-            numPasses += 1
-
-            if numPasses % 3 == 0:
-                learnRate += 0.1
-                self.gradient_adjust(X, y, iterations=iterations, learning_rate=learnRate, display=display)
-
-            self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, display=display)
-
-            testAccuracy = self.accuracy(X, y)
-            print(testAccuracy)
-
-        if self.accuracy(X, y) < 0.95 and reinitialize:
+        if self.accuracy(X, y) < 0.70 and reinitialize:
             # try a different random weighting
             self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
             self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
@@ -188,11 +174,66 @@ def test():
     NN = neural_network()
 
     print('accuracy before training: ' + str(NN.accuracy(X, y) * 100.0) + '%')
-
     NN.train(X, y)
 
+    print(NN.predict(X))
     return NN.accuracy(X, y, string=True)
+
+def iris():
+
+    # iris test data classification problem from sklearn
+    from sklearn import datasets
+    from sklearn.cross_validation import train_test_split
+    from sklearn import preprocessing
+    data = datasets.load_iris()
+    X = data.data
+    y = data.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, test_size=0.3)
+
+    X_train = preprocessing.normalize(X_train)
+    X_test = preprocessing.normalize(X_test)
+
+
+    NN = neural_network()
+
+    NN.train(X_train, y_train, learning_rate=0.1, iterations=1000, display=True)
+
+    yhat = NN.predict(X_test)
+    for i in range(len(y_test)):
+        print(y_test[i], ' : ', yhat[i])
+    print(NN.predict(X_test))
+
+
+def boston_housing():
+    from sklearn import datasets
+    from sklearn.cross_validation import train_test_split
+    from sklearn import preprocessing
+    import time
+    data = datasets.load_boston()
+
+    X = data.data
+    y = data.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, test_size=0.2)
+
+    X_train = np.array(X_train).reshape((404, 13))
+    X_test = np.array(X_test).reshape((102, 13))
+    y_train = np.array(y_train).reshape((404, 1))
+    y_test = np.array(y_test).reshape((102, 1))
+
+    X_train = preprocessing.normalize(X_train)
+    X_test = preprocessing.normalize(X_test)
+    y_train = preprocessing.normalize(y_train)
+    y_test = preprocessing.normalize(y_test)
+
+    NN = neural_network()
+
+    startTime = time.time()
+    NN.train(X_train, y_train, iterations=100, learning_rate=0.01, regularize=True)
+    endTime = time.time()
+
+    totalTime = endTime - startTime
+    print(NN.predict(X_test), 'total time:', totalTime)
+
 
 if __name__ == '__main__':
     test()
-

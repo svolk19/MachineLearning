@@ -2,15 +2,16 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 from sklearn import datasets
+from sklearn import preprocessing
 
 class neural_network(object):
-    def __init__(self):
+    def __init__(self, inputsize, outputsize, hidden1size, hidden2size):
 
         # layer sizes
-        self.inputSize = 4
-        self.outputSize = 3
-        self.hidden1Size = 4
-        self.hidden2Size = 4
+        self.inputSize = inputsize
+        self.outputSize = outputsize
+        self.hidden1Size = hidden1size
+        self.hidden2Size = hidden2size
 
         # initialize random primary weight and bias scheme
         self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
@@ -78,8 +79,8 @@ class neural_network(object):
 
         # backpropagation of value X
         num_examples = len(X)
-        delta4 = self.forwardPropagate(X)
-        delta4[range(num_examples), y] -= 1
+        yhat = self.forwardPropagate(X)
+        delta4 = -1.0 * (y - yhat)
         dJdW3 = np.dot(self.a3.T, delta4)
         dJdB3 = np.sum(delta4, axis=0)
         delta3 = np.dot(delta4, self.w3.T) * self.sigmoid(self.z3, deriv=True)
@@ -143,7 +144,7 @@ class neural_network(object):
             self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
             self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
             self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
-        
+
             self.train(X, y)
 
 
@@ -152,7 +153,7 @@ class neural_network(object):
         errorCount = 0
         yhat = self.predict(X)
         for i, elem in enumerate(yhat):
-            if elem != y[i]:
+            if y[i][elem] != 1:
                 errorCount += 1
 
         accuracy = 1.0 - errorCount / len(y)
@@ -163,23 +164,11 @@ class neural_network(object):
             return accuracy
 
 
-def iris():
-
-    # iris test data classification problem from sklearn
-    from sklearn import datasets
-    from sklearn.cross_validation import train_test_split
-    data = datasets.load_iris()
-    X = data.data
-    y = data.target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, test_size=0.3)
-
-    NN = neural_network()
-    print(NN.forwardPropagate(X_test))
-    NN.train(X_train, y_train, learning_rate=0.1, iterations=1000, display=True)
-    print(NN.forwardPropagate(X_test))
-
 if __name__ == '__main__':
-    print('---------------------------\n\n' + 'iris classifier\n\n' + '---------------------------\n\n')
-    iris()
+    import test_examples_classifier as t
 
+    print('---------------------------\n\n' + 'iris classifier\n\n' + '---------------------------\n\n')
+
+    NN = neural_network(4, 3, 3, 3)
+    t.iris(NN)
 
