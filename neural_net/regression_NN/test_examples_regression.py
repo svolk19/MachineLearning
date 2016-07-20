@@ -1,10 +1,12 @@
-def boston_housing(NN):
-    import numpy as np
-    from sklearn import datasets
-    from sklearn.cross_validation import train_test_split
-    from sklearn import preprocessing
-    import time
+import numpy as np
+from sklearn import datasets
+from sklearn.cross_validation import train_test_split
+from sklearn import preprocessing
+import time
+import neural_net_regression as neural_net
 
+
+def boston_housing(NN):
     data = datasets.load_boston()
 
     X = data.data
@@ -52,3 +54,7 @@ def Xor(NN):
 
     NN.train(X, y)
     return NN.accuracy(X, y, string=True)
+
+if __name__ == '__main__':
+    NN = neural_net.neural_network(13, 1, 10, 10)
+    boston_housing(NN)

@@ -1,9 +1,11 @@
-def iris(NN):
+import neural_net_regression as neural_net
+from sklearn import datasets
+from sklearn.cross_validation import train_test_split
+from sklearn import preprocessing
 
+
+def iris(NN):
     # iris test data classification problem from sklearn
-    from sklearn import datasets
-    from sklearn.cross_validation import train_test_split
-    from sklearn import preprocessing
 
     data = datasets.load_iris()
     X = data.data
@@ -41,3 +43,7 @@ def iris(NN):
 
     NN.train(X_train, y_train, learning_rate=0.01, iterations=100, display=True)
     print(NN.accuracy(X_test, y_test))
+
+if __name__  == '__main__':
+    NN = neural_net.neural_network(4, 5, 5, 3)
+    iris(NN)

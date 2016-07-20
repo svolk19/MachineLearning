@@ -1,15 +1,14 @@
 import numpy as np
-import math
 import matplotlib.pyplot as plt
 
 class neural_network(object):
-    def __init__(self):
+    def __init__(self, inputSize, outputSize, hidden1Size, hidden2Size):
 
         # layer sizes
-        self.inputSize = 2
-        self.outputSize = 1
-        self.hidden1Size = 3
-        self.hidden2Size = 3
+        self.inputSize = inputSize
+        self.outputSize = outputSize
+        self.hidden1Size = hidden1Size
+        self.hidden2Size = hidden2Size
 
         # initialize random primary weight and bias scheme
         self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
@@ -35,7 +34,7 @@ class neural_network(object):
         else:
             for i, column in enumerate(X):
                 for j, elem in enumerate(column):
-                    X[i][j] = math.tanh(elem)
+                    X[i][j] = np.tanh(elem)
             return X
 
     def predict(self, X):
@@ -144,10 +143,4 @@ class neural_network(object):
             error += ((y[i] - yHat[i]) ** 2) * 0.5
 
         return error
-
-if __name__ == '__main__':
-    import test_examples_regression as t
-
-    NN = neural_network(13, 1, 10, 10)
-    t.boston_housing(NN)
 

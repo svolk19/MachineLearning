@@ -1,8 +1,5 @@
 import numpy as np
-import math
 import matplotlib.pyplot as plt
-from sklearn import datasets
-from sklearn import preprocessing
 
 class neural_network(object):
     def __init__(self, inputsize, outputsize, hidden1size, hidden2size):
@@ -162,13 +159,4 @@ class neural_network(object):
             print("accuracy: " + str(accuracy * 100.0) + "%")
         else:
             return accuracy
-
-
-if __name__ == '__main__':
-    import test_examples_classifier as t
-
-    print('---------------------------\n\n' + 'iris classifier\n\n' + '---------------------------\n\n')
-
-    NN = neural_network(4, 3, 3, 3)
-    t.iris(NN)
 
