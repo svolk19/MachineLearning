@@ -1,7 +1,8 @@
-import neural_net_regression as neural_net
+import neural_net_classifier as neural_net
 from sklearn import datasets
 from sklearn.cross_validation import train_test_split
 from sklearn import preprocessing
+import numpy as np
 
 
 def iris(NN):
@@ -41,9 +42,9 @@ def iris(NN):
             continue
     y_test = np.array(y_testList)
 
-    NN.train(X_train, y_train, learning_rate=0.01, iterations=100, display=True)
+    NN.train(X_train, y_train, learning_rate=0.001, iterations=10000, regularize=False, regChange=0.01)
     print(NN.accuracy(X_test, y_test))
 
 if __name__  == '__main__':
-    NN = neural_net.neural_network(4, 5, 5, 3)
+    NN = neural_net.neural_network(4, 3, 5, 5)
     iris(NN)

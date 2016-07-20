@@ -1,22 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import utils.activations as act
+import utils.gradient_descents as gd
+
 
 class neural_network(object):
-    def __init__(self, inputsize, outputsize, hidden1size, hidden2size):
+    def __init__(self, input_size, output_size, hidden1_size, hidden2_size):
 
         # layer sizes
-        self.inputSize = inputsize
-        self.outputSize = outputsize
-        self.hidden1Size = hidden1size
-        self.hidden2Size = hidden2size
+        self.inputSize = input_size
+        self.outputSize = output_size
+        self.hidden1Size = hidden1_size
+        self.hidden2Size = hidden2_size
 
         # initialize random primary weight and bias scheme
-        self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
-        self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
-        self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
-        self.b1 = np.zeros(self.hidden1Size)
-        self.b2 = np.zeros(self.hidden2Size)
-        self.b3 = np.zeros(self.outputSize)
+        w1 = np.random.randn(self.inputSize, self.hidden1Size)
+        w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
+        w3 = np.random.randn(self.hidden2Size, self.outputSize)
+
+        self.weights = np.array([w1, w2, w3])
+
+        b1 = np.zeros(self.hidden1Size)
+        b2 = np.zeros(self.hidden2Size)
+        b3 = np.zeros(self.outputSize)
+
+        self.biases = np.array([b1, b2, b3])
 
         # initialize forward propagation parameters to 0.0
         self.z2 = 0.0
@@ -26,51 +34,29 @@ class neural_network(object):
         self.z4 = 0.0
         self.a4 = 0.0
 
-    def sigmoid(self, X, deriv=False):
-
-        # activation function at each neuron: tanh
-        # assumes X is a numpy array
-        if deriv:
-            return 1.0 - X ** 2
-        else:
-            for i, column in enumerate(X):
-                for j, elem in enumerate(column):
-                    X[i][j] = np.tanh(elem)
-            return X
-
-    def softmax(self, X):
-
-        # activation for last set of neurons: the probabilistic normalizer
-        # assumes X is a numpy array
-        exp = np.exp(X)
-        expSum = np.sum(exp, axis=0)
-        return exp / expSum
-
     def predict(self, X):
 
         # feed forward data set X
         # assumes X is a numpy array, returns numpy array
-        self.z2 = np.dot(X, self.w1) + self.b1
-        self.a2 = self.sigmoid(self.z2)
-        self.z3 = np.dot(self.a2, self.w2) + self.b2
-        self.a3 = self.sigmoid(self.z3)
-        self.z4 = np.dot(self.a3, self.w3) + self.b3
-        results = np.exp(self.z4)
-        probabilities = results / np.sum(results, axis=1, keepdims=True)
-        return np.argmax(probabilities, axis=1)
+        self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
+        self.a2 = act.sigmoid(self.z2)
+        self.z3 = np.dot(self.a2, self.weights[1]) + self.biases[1]
+        self.a3 = act.sigmoid(self.z3)
+        self.z4 = np.dot(self.a3, self.weights[2]) + self.biases[2]
+
+        return act.softmax(self.z4, predict=True)
 
     def forwardPropagate(self, X):
 
         # feed forward data set X
         # assumes X is a numpy array, returns numpy array
-        self.z2 = np.dot(X, self.w1) + self.b1
-        self.a2 = self.sigmoid(self.z2)
-        self.z3 = np.dot(self.a2, self.w2) + self.b2
-        self.a3 = self.sigmoid(self.z3)
-        self.z4 = np.dot(self.a3, self.w3) + self.b3
-        results = np.exp(self.z4)
-        probabilities = results / np.sum(results, axis=1, keepdims=True)
-        return probabilities
+        self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
+        self.a2 = act.sigmoid(self.z2)
+        self.z3 = np.dot(self.a2, self.weights[1]) + self.biases[1]
+        self.a3 = act.sigmoid(self.z3)
+        self.z4 = np.dot(self.a3, self.weights[2]) + self.biases[2]
+
+        return act.softmax(self.z4)
 
     def backPropagate(self, X, y):
 
@@ -80,70 +66,26 @@ class neural_network(object):
         delta4 = -1.0 * (y - yhat)
         dJdW3 = np.dot(self.a3.T, delta4)
         dJdB3 = np.sum(delta4, axis=0)
-        delta3 = np.dot(delta4, self.w3.T) * self.sigmoid(self.z3, deriv=True)
+        delta3 = np.dot(delta4, self.weights[2].T) * act.sigmoid(self.z3, deriv=True)
         dJdW2 = np.dot(self.a2.T, delta3)
         dJdB2 = np.sum(delta3, axis=0)
-        delta2 = np.dot(delta3, self.w2.T) * self.sigmoid(self.z2, deriv=True)
+        delta2 = np.dot(delta3, self.weights[1].T) * act.sigmoid(self.z2, deriv=True)
         dJdW1 = np.dot(X.T, delta2)
         dJdB1 = np.sum(delta2, axis=0)
 
-        return dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3
+        weight_gradients = np.array([dJdW1, dJdW2, dJdW3])
+        bias_gradients = np.array([dJdB1, dJdB2, dJdB3])
 
-    def gradient_adjust(self, X, y, iterations=5000, learning_rate=0.01, regChange=0.01, display=False, regularize=False):
+        return weight_gradients, bias_gradients
 
-        # train neural network until greater than or equal to 99.5% accuracy is achieved
-        for num in range(iterations):
-
-            # calculate gradients
-            dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3 = self.backPropagate(X, y)
-
-            # train weights and biases
-
-            if regularize:
-                self.w1 += regChange * self.w1
-                self.w2 += regChange * self.w2
-                self.w3 += regChange * self.w3
-
-            for i, deriv in enumerate(dJdW1):
-                self.w1[i] += -learning_rate * deriv
-
-            for i, deriv in enumerate(dJdW2):
-                self.w2[i] += -learning_rate * deriv
-
-            for i, deriv in enumerate(dJdW3):
-                self.w3[i] += -learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB1):
-                self.b1[i] += -learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB2):
-                self.b2[i] += -learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB3):
-                self.b3[i] += -learning_rate * deriv
-
-
-            if display:
-                plt.scatter(num, self.accuracy(X, y))
-
-        if display:
-            plt.show()
-
-    def train(self, X, y, iterations=1000, learning_rate=0.5, regChange=0.01, display=False,
-              regularize=False, reinitialize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, regularize=False):
         # neural net training
 
-        self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, regChange=regChange,
-                             display=display, regularize=regularize)
+        weight_gradients, bias_gradients = self.backPropagate(X, y)
 
-        if reinitialize and self.accuracy(X, y) < 0.95:
-            # try a different random weighting
-            self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
-            self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
-            self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
-
-            self.train(X, y)
-
+        self.weights, self.biases = gd.batch_gradient_descent(self.weights, self.biases, weight_gradients, bias_gradients,
+                                                              X, y, iterations=iterations, learning_rate=learning_rate,
+                                                              reg_lambda=reg_lambda, regularize=regularize)
 
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net
