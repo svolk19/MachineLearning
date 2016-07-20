@@ -136,104 +136,18 @@ class neural_network(object):
         else:
             return accuracy
 
-    def error(self, X, y):
+    def squared_error(self, X, y):
         # produces the total squared error of neural net
         error = 0.0
         yHat = self.predict(X)
         for i in range(len(yHat)):
-            error += (y[i] - yHat[i]) ** 2
+            error += ((y[i] - yHat[i]) ** 2) * 0.5
 
         return error
 
-
-def Xor():
-    # teach neural net Xor function
-    X = np.array(([0, 0], [0, 1], [1, 0], [1, 1]), dtype=float)
-    y = np.array(([0], [1], [1], [0]), dtype=float)
-
-    NN = neural_network()
-
-    print('accuracy before training: ' + str(NN.accuracy(X, y) * 100.0) + '%')
-
-    NN.train(X, y)
-
-    return NN.accuracy(X, y, string=True)
-
-
-
-def test():
-
-    # teaches neural net correlation between hours studied, hours slept and test score
-
-    X = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
-    y = np.array(([75], [82], [93]), dtype=float)
-
-    X = X/np.amax(X)
-    y = y/100
-
-    NN = neural_network()
-
-    print('accuracy before training: ' + str(NN.accuracy(X, y) * 100.0) + '%')
-    NN.train(X, y)
-
-    print(NN.predict(X))
-    return NN.accuracy(X, y, string=True)
-
-def iris():
-
-    # iris test data classification problem from sklearn
-    from sklearn import datasets
-    from sklearn.cross_validation import train_test_split
-    from sklearn import preprocessing
-    data = datasets.load_iris()
-    X = data.data
-    y = data.target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, test_size=0.3)
-
-    X_train = preprocessing.normalize(X_train)
-    X_test = preprocessing.normalize(X_test)
-
-
-    NN = neural_network()
-
-    NN.train(X_train, y_train, learning_rate=0.1, iterations=1000, display=True)
-
-    yhat = NN.predict(X_test)
-    for i in range(len(y_test)):
-        print(y_test[i], ' : ', yhat[i])
-    print(NN.predict(X_test))
-
-
-def boston_housing():
-    from sklearn import datasets
-    from sklearn.cross_validation import train_test_split
-    from sklearn import preprocessing
-    import time
-    data = datasets.load_boston()
-
-    X = data.data
-    y = data.target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, test_size=0.2)
-
-    X_train = np.array(X_train).reshape((404, 13))
-    X_test = np.array(X_test).reshape((102, 13))
-    y_train = np.array(y_train).reshape((404, 1))
-    y_test = np.array(y_test).reshape((102, 1))
-
-    X_train = preprocessing.normalize(X_train)
-    X_test = preprocessing.normalize(X_test)
-    y_train = preprocessing.normalize(y_train)
-    y_test = preprocessing.normalize(y_test)
-
-    NN = neural_network()
-
-    startTime = time.time()
-    NN.train(X_train, y_train, iterations=100, learning_rate=0.01, regularize=True)
-    endTime = time.time()
-
-    totalTime = endTime - startTime
-    print(NN.predict(X_test), 'total time:', totalTime)
-
-
 if __name__ == '__main__':
-    test()
+    import test_examples_regression as t
+
+    NN = neural_network(13, 1, 10, 10)
+    t.boston_housing(NN)
+
