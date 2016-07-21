@@ -47,7 +47,11 @@ def iris(NN):
     y_test = np.array(y_testList)
     y_test.reshape((45, 3))
 
+<<<<<<< HEAD
     NN.train(X_train, y_train, learning_rate=0.001, iterations=1000, regularize=False, regChange=0.01)
+=======
+    NN.train(X_train, y_train, learning_rate=0.001, iterations=100000, regularize=False)
+>>>>>>> master
     print(NN.accuracy(X_test, y_test))
 
 if __name__  == '__main__':
