@@ -1,29 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
-<<<<<<< HEAD
-
-class neural_network(object):
-    def __init__(self, inputSize, outputSize, hidden1Size, hidden2Size):
-
-        # layer sizes
-        self.inputSize = inputSize
-        self.outputSize = outputSize
-        self.hidden1Size = hidden1Size
-        self.hidden2Size = hidden2Size
-
-        # initialize random primary weight and bias scheme
-        self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
-        self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
-        self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
-
-        self.weights = np.array([self.w1, self.w2, self.w3])
-
-        self.b1 = np.zeros(self.hidden1Size)
-        self.b2 = np.zeros(self.hidden2Size)
-        self.b3 = np.zeros(self.outputSize)
-=======
-
 
 class neural_network(object):
     def __init__(self, input_size, output_size, hidden1_size, hidden2_size):
@@ -46,9 +23,6 @@ class neural_network(object):
         b3 = np.zeros(self.outputSize)
 
         self.biases = np.array([b1, b2, b3])
->>>>>>> master
-
-        self.biases = np.array([self.b1, self.b2, self.b3])
 
         # initialize forward propagation parameters to 0.0
         self.z2 = 0.0
@@ -66,37 +40,23 @@ class neural_network(object):
         self.z3 = np.dot(self.a2, self.weights[1]) + self.biases[1]
         self.a3 = act.sigmoid(self.z3)
         self.z4 = np.dot(self.a3, self.weights[2]) + self.biases[2]
-<<<<<<< HEAD
         results = np.exp(self.z4)
         probabilities = results / np.sum(results, axis=1, keepdims=True)
         return np.argmax(probabilities, axis=1)
-=======
-
-        return act.softmax(self.z4, predict=True)
->>>>>>> master
 
     def forwardPropagate(self, X):
 
         # feed forward data set X
         # assumes X is a numpy array, returns numpy array
-<<<<<<< HEAD
-        self.z2 = np.dot(X, self.w1) + self.b1
-        self.a2 = act.sigmoid(self.z2)
-        self.z3 = np.dot(self.a2, self.w2) + self.b2
-        self.a3 = act.sigmoid(self.z3)
-        self.z4 = np.dot(self.a3, self.w3) + self.b3
-        results = np.exp(self.z4)
-        probabilities = results / np.sum(results, axis=1, keepdims=True)
-        return probabilities
-=======
+
         self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
         self.a2 = act.sigmoid(self.z2)
         self.z3 = np.dot(self.a2, self.weights[1]) + self.biases[1]
         self.a3 = act.sigmoid(self.z3)
         self.z4 = np.dot(self.a3, self.weights[2]) + self.biases[2]
-
-        return act.softmax(self.z4)
->>>>>>> master
+        results = np.exp(self.z4)
+        probabilities = results / np.sum(results, axis=1, keepdims=True)
+        return probabilities
 
     def backPropagate(self, X, y):
 
@@ -113,10 +73,8 @@ class neural_network(object):
         dJdW1 = np.dot(X.T, delta2)
         dJdB1 = np.sum(delta2, axis=0)
 
-        weight_gradients = np.array([dJdW1, dJdW2, dJdW3])
-        bias_gradients = np.array([dJdB1, dJdB2, dJdB3])
+        return dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3
 
-<<<<<<< HEAD
     def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, regChange=0.01, display=False,
                             regularize=False):
 
@@ -124,32 +82,10 @@ class neural_network(object):
         for num in range(iterations):
 
             # calculate gradients
-            dJdw1, dJdw2, dJdw3, dJdB1, dJdB2, dJdB3 = self.backPropagate(X, y)
-=======
-        return weight_gradients, bias_gradients
-
-    def batch_gradient_descent(self, weight_gradients, bias_gradients, X, y, iterations=5000,
-                                   learning_rate=0.01, reg_lambda=0.01, regularize=False, print_accuracies=False):
-
-        """
-        implements simple batch gradient descent
-        :param weights: tuple of numpy weight arrays
-        :param biases: tuple of numpy bias arrays
-        :param weight_gradients: tuple of numpy arrays of weight gradients
-        :param bias_gradients: tuple of numpy arrays of bias gradients
-        :param X: input data
-        :param y: output data
-        :param print_accuracies: prints accuracy at each iteration
-        :param reg_lambda: regularization rate
-        :return: new weights, new biases
-        """
->>>>>>> master
-
-        for num in range(iterations):
+            dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3 = self.backPropagate(X, y)
 
             # iterate through weights and add regularization
             if regularize:
-<<<<<<< HEAD
                 self.weights[0] += regChange * self.weights[0]
                 self.weights[1] += regChange * self.weights[1]
                 self.weights[2] += regChange * self.weights[2]
@@ -184,33 +120,6 @@ class neural_network(object):
 
         self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, regChange=regChange,
                              display=display, regularize=regularize)
-=======
-                for weight_scheme in self.weights:
-                    for weight in weight_scheme:
-                        weight += reg_lambda * weight
-
-            # iterate through weight gradients and adjust weights
-            for i, weight_gradient_scheme in enumerate(weight_gradients):
-                for j, weight_gradient in enumerate(weight_gradient_scheme):
-                    self.weights[i][j] -= learning_rate * weight_gradient
-
-            # iterate through bias gradients and adjust biases
-            for i, bias_gradient_scheme in enumerate(bias_gradients):
-                for j, bias_gradient in enumerate(bias_gradient_scheme):
-                    self.biases[i][j] -= learning_rate * bias_gradient
-
-            if print_accuracies:
-                print(self.accuracy(X, y))
-
-    def train(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, regularize=False, print_accuracies=False):
-        # neural net training
-
-        weight_gradients, bias_gradients = self.back_propagate(X, y)
-
-        self.batch_gradient_descent(weight_gradients, bias_gradients, X, y, iterations=iterations,
-                                    learning_rate=learning_rate, reg_lambda=reg_lambda, regularize=regularize,
-                                    print_accuracies=print_accuracies)
->>>>>>> master
 
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net

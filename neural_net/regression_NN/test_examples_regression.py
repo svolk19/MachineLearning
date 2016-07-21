@@ -23,11 +23,7 @@ def boston_housing(NN):
     X_test = preprocessing.normalize(X_test)
 
     startTime = time.time()
-<<<<<<< HEAD
     NN.train(X_train, y_train, iterations=10, learning_rate=0.01, regularize=True)
-=======
-    NN.gradient_adjust(X_train, y_train, iterations=1000, learning_rate=0.001, regularize=True)
->>>>>>> master
     endTime = time.time()
 
     totalTime = endTime - startTime
