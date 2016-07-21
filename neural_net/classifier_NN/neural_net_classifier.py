@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import utils.activations as act
-import utils.gradient_descents as gd
+import neural_net.utils.activations as act
+import neural_net.utils.gradient_descents as gd
 
 
 class neural_network(object):

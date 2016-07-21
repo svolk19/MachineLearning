@@ -24,7 +24,7 @@ def boston_housing(NN):
     y_test = preprocessing.normalize(y_test)
 
     startTime = time.time()
-    NN.train(X_train, y_train, iterations=100, learning_rate=0.01, regularize=True)
+    NN.train(X_train, y_train, iterations=10000, learning_rate=0.001, regularize=True)
     endTime = time.time()
 
     totalTime = endTime - startTime
@@ -74,7 +74,7 @@ def diabetes_test(NN):
     y_test = preprocessing.normalize(y_test)
 
     startTime = time.time()
-    NN.train(X_train, y_train, iterations=5000, learning_rate=0.01, regularize=False, regChange=0.001, display=True)
+    NN.train(X_train, y_train, iterations=5000, learning_rate=0.01, regularize=False, regChange=0.001)
     endTime = time.time()
 
 
