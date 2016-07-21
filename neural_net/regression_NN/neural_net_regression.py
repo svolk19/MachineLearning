@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
-import neural_net.utils.gradient_descents as gd
 
 class NeuralNetwork(object):
 
@@ -61,21 +60,57 @@ class NeuralNetwork(object):
         dJdW1 = np.dot(X.T, delta2)
         dJdB1 = np.sum(delta2, axis=0)
 
-        weight_gradients = np.array([dJdW1, dJdW2, dJdW3])
-        bias_gradients = np.array([dJdB1, dJdB2, dJdB3])
+        return dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3
 
-        return weight_gradients, bias_gradients
+    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.01, reg_lambda=0.01, display=False,
+                        regularize=False):
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, regularize=False):
-        # neural net training
+        # train neural network
+        for num in range(iterations):
 
-        weight_gradients, bias_gradients = self.back_propagate(X, y)
+            # calculate gradients
+            dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3 = self.back_propagate(X, y)
 
-        self.weights, self.biases = gd.batch_gradient_descent(self.weights, self.biases, weight_gradients, bias_gradients,
-                                                              X, y, iterations=iterations, learning_rate=learning_rate,
-                                                              reg_lambda=reg_lambda, regularize=regularize)
+            # train weights and biases
 
-        return 'accuracy:' + str(self.accuracy(X, y))
+            if regularize:
+                self.weights[0] += reg_lambda * self.weights[0]
+                self.weights[1] += reg_lambda * self.weights[1]
+                self.weights[2] += reg_lambda * self.weights[2]
+
+            for i, deriv in enumerate(dJdW1):
+                self.weights[0][i] += -learning_rate * deriv
+
+            for i, deriv in enumerate(dJdW2):
+                self.weights[1][i] += -learning_rate * deriv
+
+            for i, deriv in enumerate(dJdW3):
+                self.weights[2][i] += -learning_rate * deriv
+
+            for i, deriv in enumerate(dJdB1):
+                self.biases[0][i] += -learning_rate * deriv
+
+            for i, deriv in enumerate(dJdB2):
+                self.biases[1][i] += -learning_rate * deriv
+
+            for i, deriv in enumerate(dJdB3):
+                self.biases[2][i] += -learning_rate * deriv
+
+            if display:
+                plt.scatter(num, self.accuracy(X, y))
+
+        if display:
+            plt.show()
+
+    def train(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, regularize=False, print_accuracies=False, display=False):
+            # neural net training
+
+            # self.batch_gradient_descent(X, y, iterations=iterations,
+            #                             learning_rate=learning_rate, reg_lambda=reg_lambda, regularize=regularize,
+            #                             print_accuracies=print_accuracies)
+
+        self.gradient_adjust(self, X, y, iterations=iterations, learning_rate=learning_rate, reg_lambda=reg_lambda, display=display,
+                    regularize=regularize)
 
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net

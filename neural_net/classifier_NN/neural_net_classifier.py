@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
-import neural_net.utils.gradient_descents as gd
 
 
 class neural_network(object):
@@ -78,14 +77,51 @@ class neural_network(object):
 
         return weight_gradients, bias_gradients
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, regularize=False):
+    def batch_gradient_descent(self, weight_gradients, bias_gradients, X, y, iterations=5000,
+                                   learning_rate=0.01, reg_lambda=0.01, regularize=False, print_accuracies=False):
+
+        """
+        implements simple batch gradient descent
+        :param weights: tuple of numpy weight arrays
+        :param biases: tuple of numpy bias arrays
+        :param weight_gradients: tuple of numpy arrays of weight gradients
+        :param bias_gradients: tuple of numpy arrays of bias gradients
+        :param X: input data
+        :param y: output data
+        :param print_accuracies: prints accuracy at each iteration
+        :param reg_lambda: regularization rate
+        :return: new weights, new biases
+        """
+
+        for num in range(iterations):
+
+            # iterate through weights and add regularization
+            if regularize:
+                for weight_scheme in self.weights:
+                    for weight in weight_scheme:
+                        weight += reg_lambda * weight
+
+            # iterate through weight gradients and adjust weights
+            for i, weight_gradient_scheme in enumerate(weight_gradients):
+                for j, weight_gradient in enumerate(weight_gradient_scheme):
+                    self.weights[i][j] -= learning_rate * weight_gradient
+
+            # iterate through bias gradients and adjust biases
+            for i, bias_gradient_scheme in enumerate(bias_gradients):
+                for j, bias_gradient in enumerate(bias_gradient_scheme):
+                    self.biases[i][j] -= learning_rate * bias_gradient
+
+            if print_accuracies:
+                print(self.accuracy(X, y))
+
+    def train(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, regularize=False, print_accuracies=False):
         # neural net training
 
-        weight_gradients, bias_gradients = self.backPropagate(X, y)
+        weight_gradients, bias_gradients = self.back_propagate(X, y)
 
-        self.weights, self.biases = gd.batch_gradient_descent(self.weights, self.biases, weight_gradients, bias_gradients,
-                                                              X, y, iterations=iterations, learning_rate=learning_rate,
-                                                              reg_lambda=reg_lambda, regularize=regularize)
+        self.batch_gradient_descent(weight_gradients, bias_gradients, X, y, iterations=iterations,
+                                    learning_rate=learning_rate, reg_lambda=reg_lambda, regularize=regularize,
+                                    print_accuracies=print_accuracies)
 
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net

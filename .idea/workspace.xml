@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6dfb06d6-a058-4308-b209-c532a351e7e3" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/neural_net/classifier_NN/utils/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/neural_net/classifier_NN/utils/activations.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/neural_net/classifier_NN/utils/gradient_descents.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/neural_net/regression_NN/utils/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/neural_net/regression_NN/utils/activations.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/neural_net/regression_NN/utils/gradient_descents.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neural_net/classifier_NN/neural_net_classifier.py" afterPath="$PROJECT_DIR$/neural_net/classifier_NN/neural_net_classifier.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neural_net/classifier_NN/test_examples_classifier.py" afterPath="$PROJECT_DIR$/neural_net/classifier_NN/test_examples_classifier.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neural_net/regression_NN/neural_net_regression.py" afterPath="$PROJECT_DIR$/neural_net/regression_NN/neural_net_regression.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neural_net/regression_NN/test_examples_regression.py" afterPath="$PROJECT_DIR$/neural_net/regression_NN/test_examples_regression.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neural_net/utils/activations.py" afterPath="$PROJECT_DIR$/neural_net/utils/activations.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neural_net/utils/gradient_descents.py" afterPath="$PROJECT_DIR$/neural_net/utils/gradient_descents.py" />
     </list>
     <ignored path="MachineLearning.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,7 +27,7 @@
     <SUITE FILE_PATH="coverage/MachineLearning$neural_net_regression.coverage" NAME="neural_net_regression Coverage Results" MODIFIED="1468957759796" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net" />
     <SUITE FILE_PATH="coverage/MachineLearning$neural_net.coverage" NAME="neural_net Coverage Results" MODIFIED="1467493224416" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net" />
     <SUITE FILE_PATH="coverage/MachineLearning$test_NN.coverage" NAME="test_NN Coverage Results" MODIFIED="1467492125148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net" />
-    <SUITE FILE_PATH="coverage/MachineLearning$test_examples_regression.coverage" NAME="test_examples_regression Coverage Results" MODIFIED="1469057074794" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net/regression_NN" />
+    <SUITE FILE_PATH="coverage/MachineLearning$test_examples_regression.coverage" NAME="test_examples_regression Coverage Results" MODIFIED="1469133472554" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net/regression_NN" />
     <SUITE FILE_PATH="coverage/MachineLearning$rand_data_gen.coverage" NAME="rand_data_gen Coverage Results" MODIFIED="1466371953204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net/NN_gravity_proof" />
     <SUITE FILE_PATH="coverage/MachineLearning$neural_net_regression__1_.coverage" NAME="neural_net_regression (1) Coverage Results" MODIFIED="1468960230750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net/regression_NN" />
     <SUITE FILE_PATH="coverage/MachineLearning$neural_net_classifier.coverage" NAME="neural_net_classifier Coverage Results" MODIFIED="1468960514601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net" />
@@ -40,7 +37,7 @@
     <SUITE FILE_PATH="coverage/MachineLearning$KNearestNeighbors.coverage" NAME="KNearestNeighbors Coverage Results" MODIFIED="1464297821165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MachineLearning$RegressionLinear.coverage" NAME="RegressionLinear Coverage Results" MODIFIED="1464375378806" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MachineLearning$SKLearnTest.coverage" NAME="SKLearnTest Coverage Results" MODIFIED="1468625424713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/MachineLearning$test_examples_classifier.coverage" NAME="test_examples_classifier Coverage Results" MODIFIED="1469029804104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net/classifier_NN" />
+    <SUITE FILE_PATH="coverage/MachineLearning$test_examples_classifier.coverage" NAME="test_examples_classifier Coverage Results" MODIFIED="1469113246092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/neural_net/classifier_NN" />
     <SUITE FILE_PATH="coverage/MachineLearning$KNNTutorial.coverage" NAME="KNNTutorial Coverage Results" MODIFIED="1464275926745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -52,11 +49,43 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+      <file leaf-file-name="test_examples_classifier.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/neural_net/classifier_NN/test_examples_classifier.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1100">
+              <caret line="44" column="67" selection-start-line="44" selection-start-column="67" selection-end-line="44" selection-end-column="67" />
+              <folding>
+                <element signature="e#0#42#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activations.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/neural_net/utils/activations.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="475">
+              <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gradient_descents.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/neural_net/utils/gradient_descents.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="test_examples_regression.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/neural_net/regression_NN/test_examples_regression.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-799">
-              <caret line="26" column="45" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
+            <state relative-caret-position="475">
+              <caret line="25" column="76" selection-start-line="25" selection-start-column="76" selection-end-line="25" selection-end-column="76" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -64,12 +93,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="neural_net_regression.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="neural_net_regression.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/neural_net/regression_NN/neural_net_regression.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
-              <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
-              <folding />
+            <state relative-caret-position="-350">
+              <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#207#1027#0" expanded="false" />
+                <element signature="e#1063#1484#0" expanded="false" />
+                <element signature="e#1531#2176#0" expanded="false" />
+                <element signature="e#4208#4575#0" expanded="false" />
+                <element signature="e#4620#4827#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -77,9 +113,11 @@
       <file leaf-file-name="neural_net_classifier.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/neural_net/classifier_NN/neural_net_classifier.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="2" column="38" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="38" />
-              <folding />
+            <state relative-caret-position="650">
+              <caret line="110" column="72" selection-start-line="110" selection-start-column="72" selection-end-line="110" selection-end-column="72" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -120,13 +158,13 @@
         <option value="$PROJECT_DIR$/neural_net/neural_net_classifier.py" />
         <option value="$PROJECT_DIR$/neural_net/TF_test.py" />
         <option value="$PROJECT_DIR$/neural_net/neural_net_regression.py" />
-        <option value="$PROJECT_DIR$/neural_net/classifier_NN/test_examples_classifier.py" />
-        <option value="$PROJECT_DIR$/neural_net/utils/activations.py" />
-        <option value="$PROJECT_DIR$/neural_net/utils/gradient_descents.py" />
-        <option value="$PROJECT_DIR$/neural_net/regression_NN/test_examples_regression.py" />
         <option value="$PROJECT_DIR$/neural_net/regression_NN/utils/gradient_descents.py" />
+        <option value="$PROJECT_DIR$/neural_net/classifier_NN/test_examples_classifier.py" />
+        <option value="$PROJECT_DIR$/neural_net/utils/gradient_descents.py" />
         <option value="$PROJECT_DIR$/neural_net/classifier_NN/neural_net_classifier.py" />
         <option value="$PROJECT_DIR$/neural_net/regression_NN/neural_net_regression.py" />
+        <option value="$PROJECT_DIR$/neural_net/regression_NN/test_examples_regression.py" />
+        <option value="$PROJECT_DIR$/neural_net/utils/activations.py" />
       </list>
     </option>
   </component>
@@ -621,7 +659,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891467" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32974318" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26429164" sideWeight="0.49808794" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26429164" sideWeight="0.49808794" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29908866" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -825,42 +863,6 @@
     <entry file="file://$PROJECT_DIR$/neural_net/TF_test.py" />
     <entry file="file://$PROJECT_DIR$/neural_net/neural_net_classifier.py" />
     <entry file="file://$PROJECT_DIR$/neural_net/neural_net_regression.py" />
-    <entry file="file://$PROJECT_DIR$/neural_net/classifier_NN/test_examples_classifier.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#42#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/neural_net/utils/activations.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/neural_net/utils/gradient_descents.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="34" column="26" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/neural_net/regression_NN/test_examples_regression.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-799">
-          <caret line="26" column="45" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/neural_net/regression_NN/utils/gradient_descents.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="650">
@@ -877,18 +879,63 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/neural_net/classifier_NN/test_examples_classifier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1100">
+          <caret line="44" column="67" selection-start-line="44" selection-start-column="67" selection-end-line="44" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/neural_net/classifier_NN/neural_net_classifier.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="38" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="38" />
+        <state relative-caret-position="650">
+          <caret line="110" column="72" selection-start-line="110" selection-start-column="72" selection-end-line="110" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/neural_net/utils/gradient_descents.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/neural_net/regression_NN/neural_net_regression.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
+        <state relative-caret-position="-350">
+          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#207#1027#0" expanded="false" />
+            <element signature="e#1063#1484#0" expanded="false" />
+            <element signature="e#1531#2176#0" expanded="false" />
+            <element signature="e#4208#4575#0" expanded="false" />
+            <element signature="e#4620#4827#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/neural_net/regression_NN/test_examples_regression.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="25" column="76" selection-start-line="25" selection-start-column="76" selection-end-line="25" selection-end-column="76" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/neural_net/utils/activations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
           <folding />
         </state>
       </provider>

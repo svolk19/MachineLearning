@@ -42,7 +42,7 @@ def iris(NN):
             continue
     y_test = np.array(y_testList)
 
-    NN.train(X_train, y_train, learning_rate=0.001, iterations=10000, regularize=False, regChange=0.01)
+    NN.train(X_train, y_train, learning_rate=0.001, iterations=100000, regularize=False)
     print(NN.accuracy(X_test, y_test))
 
 if __name__  == '__main__':

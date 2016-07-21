@@ -1,6 +1,6 @@
+import numpy as np
 
 def sigmoid(X, deriv=False):
-    import numpy as np
     # activation function at each neuron: tanh
     # assumes X is a numpy array
     if deriv:
@@ -13,12 +13,12 @@ def sigmoid(X, deriv=False):
 
 
 def softmax(X, predict=False):
-    import numpy as np
+    # defensive implementation of softmax to combat overflow
     # activation for last set of neurons: the probabilistic normalizer
     # assumes X is a numpy array
+
     exp = np.exp(X)
-    exp_sum = np.sum(exp, axis=0)
-    results = exp / exp_sum
+    results = exp / exp.sum()
 
     if predict:
         return np.argmax(results, axis=1)
