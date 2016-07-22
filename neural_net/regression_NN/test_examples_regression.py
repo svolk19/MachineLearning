@@ -1,4 +1,4 @@
-import neural_net.neural_net_regression as neural_net
+import neural_net.regression_NN.neural_net_regression as neural_net
 import numpy as np
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
@@ -65,5 +65,5 @@ def xor(NN):
     return NN.accuracy(X, y, string=True)
 
 if __name__ == '__main__':
-    NN = neural_net.neural_network(10, 1, 13, 12)
+    NN = neural_net.NeuralNetwork(10, 1, 13, 12)
     diabetes_test(NN)

@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
 import neural_net.utils.gradient_descents as sgd
+from sklearn.metrics import log_loss
 
 
 class NeuralNetwork(object):
@@ -81,6 +82,12 @@ class NeuralNetwork(object):
     def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False,
                         regularize=False, batch_size=10):
 
+        if display:
+            ax = plt.gca()
+            ax.set_title('Gradient Descent', fontsize=28)
+            plt.xlabel('number of iterations', fontsize=18)
+            plt.ylabel('cross entropy loss', fontsize=18)
+
         # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
 
@@ -108,7 +115,7 @@ class NeuralNetwork(object):
                         self.biases[i][j] -= learning_rate * bias_gradient
 
             if display:
-                plt.scatter(num, self.accuracy(X, y))
+                plt.scatter(num, self.cross_entropy_loss(X, y))
 
         if display:
             plt.show()
@@ -136,3 +143,11 @@ class NeuralNetwork(object):
             return 'accuracy: ' + str(accuracy)
         else:
             return accuracy
+
+    def cross_entropy_loss(self, X, y):
+        # return cross entropy loss
+
+        yhat = self.predict(X)
+
+        error = log_loss(y, yhat)
+        return error

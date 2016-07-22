@@ -70,6 +70,12 @@ class NeuralNetwork(object):
     def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False, regularize=False):
         # train neural network
 
+        if display:
+            ax = plt.gca()
+            ax.set_title('Gradient Descent', fontsize=28)
+            plt.xlabel('number of iterations', fontsize=18)
+            plt.ylabel('squared error', fontsize=18)
+
         for num in range(iterations):
 
             # generate mini batches
@@ -96,7 +102,7 @@ class NeuralNetwork(object):
                         self.biases[i][j] -= learning_rate * bias_gradient
 
             if display:
-                plt.scatter(num, self.accuracy(X, y))
+                ax.scatter(num, self.squared_error(X, y))
 
         if display:
             plt.show()
