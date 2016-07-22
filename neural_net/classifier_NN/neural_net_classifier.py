@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
+import neural_net.utils.gradient_descents as sgd
 
 class NeuralNetwork(object):
     def __init__(self, inputSize, outputSize, hidden1Size, hidden2Size):
@@ -79,28 +80,33 @@ class NeuralNetwork(object):
         return weight_gradients, bias_gradients
 
     def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False,
-                        regularize=False):
+                        regularize=False, batch_size=10):
 
         # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
 
-            # calculate gradients
-            weight_gradients, bias_gradients = self.backPropagate(X, y)
+            # generate mini batches
+            X_batches, y_batches = sgd.mini_batch_generate(X, y, batch_size)
 
-            # train weights and biases
+            for X_batch, y_batch in zip(X_batches, y_batches):
 
-            if regularize:
-                for weight_sheme in self.weights:
-                    for weight in weight_sheme:
-                        weight += reg_lambda * weight
+                # calculate gradients
+                weight_gradients, bias_gradients = self.backPropagate(X_batch, y_batch)
 
-            for i, weight_gradient_scheme in enumerate(weight_gradients):
-                for j, weight_gradient in enumerate(weight_gradient_scheme):
-                    self.weights[i][j] -= learning_rate * weight_gradient
+                # train weights and biases
 
-            for i, bias_gradient_scheme in enumerate(bias_gradients):
-                for j, bias_gradient in enumerate(bias_gradient_scheme):
-                    self.biases[i][j] -= learning_rate * bias_gradient
+                if regularize:
+                    for weight_scheme in self.weights:
+                        for weight in weight_scheme:
+                            weight += reg_lambda * weight
+
+                for i, weight_gradient_scheme in enumerate(weight_gradients):
+                    for j, weight_gradient in enumerate(weight_gradient_scheme):
+                        self.weights[i][j] -= learning_rate * weight_gradient
+
+                for i, bias_gradient_scheme in enumerate(bias_gradients):
+                    for j, bias_gradient in enumerate(bias_gradient_scheme):
+                        self.biases[i][j] -= learning_rate * bias_gradient
 
             if display:
                 plt.scatter(num, self.accuracy(X, y))
@@ -108,13 +114,12 @@ class NeuralNetwork(object):
         if display:
             plt.show()
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, reg_lambda=0.01, regularize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, reg_lambda=0.01,
+              batch_size=10, regularize=False):
         # neural net training
 
         self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, reg_lambda=reg_lambda,
-                             display=display, regularize=regularize)
-
-        return 'accuracy:' + str(self.accuracy(X, y))
+                             display=display, regularize=regularize, batch_size=batch_size)
 
     def accuracy(self, X, y, string=False):
         # evaluate neural network accuracy

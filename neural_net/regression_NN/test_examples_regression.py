@@ -25,27 +25,36 @@ def boston_housing(NN):
     y_test = preprocessing.normalize(y_test)
 
     startTime = time.time()
-    NN.train(X_train, y_train, iterations=100, learning_rate=0.01, regularize=True)
+    NN.train(X_train, y_train, iterations=100, learning_rate=0.01, regularize=False, display=True)
     endTime = time.time()
 
     totalTime = endTime - startTime
     print(NN.accuracy(X_test, y_test), 'total time:', totalTime)
 
+def diabetes_test(NN):
+    data = datasets.load_diabetes()
+    X = data.data
+    y = data.target
 
-def test(NN):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, test_size=0.2)
 
-    # teaches neural net correlation between hours studied, hours slept and test score
+    X_train = np.array(X_train).reshape((353, 10))
+    X_test = np.array(X_test).reshape((89, 10))
+    y_train = np.array(y_train).reshape((353, 1))
+    y_test = np.array(y_test).reshape((89, 1))
 
-    X = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
-    y = np.array(([75], [82], [93]), dtype=float)
+    X_train = preprocessing.normalize(X_train)
+    X_test = preprocessing.normalize(X_test)
+    y_train = preprocessing.normalize(y_train)
+    y_test = preprocessing.normalize(y_test)
 
-    X = X/np.amax(X)
-    y = y/100
+    startTime = time.time()
+    NN.train(X_train, y_train, iterations=100, learning_rate=0.001, regularize=False, reg_lambda=0.01, display=True)
+    endTime = time.time()
 
-    NN.train(X, y)
 
-    print(NN.predict(X))
-    return NN.accuracy(X, y, string=True)
+    totalTime = endTime - startTime
+    print('accuracy:' + str(NN.accuracy(X_test, y_test)) + '%\n' + 'total time: ' + str(totalTime))
 
 
 def Xor(NN):
@@ -57,5 +66,5 @@ def Xor(NN):
     return NN.accuracy(X, y, string=True)
 
 if __name__ == '__main__':
-    NN = neural_net.neural_network(13, 1, 10, 10)
-    boston_housing(NN)
+    NN = neural_net.neural_network(10, 1, 13, 12)
+    diabetes_test(NN)
