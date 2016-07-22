@@ -2,14 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
 
-class neural_network(object):
-    def __init__(self, input_size, output_size, hidden1_size, hidden2_size):
+class NeuralNetwork(object):
+    def __init__(self, inputSize, outputSize, hidden1Size, hidden2Size):
 
         # layer sizes
-        self.inputSize = input_size
-        self.outputSize = output_size
-        self.hidden1Size = hidden1_size
-        self.hidden2Size = hidden2_size
+        self.inputSize = inputSize
+        self.outputSize = outputSize
+        self.hidden1Size = hidden1Size
+        self.hidden2Size = hidden2Size
 
         # initialize random primary weight and bias scheme
         w1 = np.random.randn(self.inputSize, self.hidden1Size)
@@ -73,40 +73,34 @@ class neural_network(object):
         dJdW1 = np.dot(X.T, delta2)
         dJdB1 = np.sum(delta2, axis=0)
 
-        return dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3
+        weight_gradients = np.array([dJdW1, dJdW2, dJdW3])
+        bias_gradients = np.array([dJdB1, dJdB2, dJdB3])
 
-    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, regChange=0.01, display=False,
-                            regularize=False):
+        return weight_gradients, bias_gradients
 
-        # train neural network
+    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False,
+                        regularize=False):
+
+        # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
 
             # calculate gradients
-            dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3 = self.backPropagate(X, y)
+            weight_gradients, bias_gradients = self.backPropagate(X, y)
 
-            # iterate through weights and add regularization
+            # train weights and biases
+
             if regularize:
-                self.weights[0] += regChange * self.weights[0]
-                self.weights[1] += regChange * self.weights[1]
-                self.weights[2] += regChange * self.weights[2]
+                for weight_sheme in self.weights:
+                    for weight in weight_sheme:
+                        weight += reg_lambda * weight
 
-            for i, deriv in enumerate(dJdw1):
-                self.weights[0][i] -= learning_rate * deriv
+            for i, weight_gradient_scheme in enumerate(weight_gradients):
+                for j, weight_gradient in enumerate(weight_gradient_scheme):
+                    self.weights[i][j] -= learning_rate * weight_gradient
 
-            for i, deriv in enumerate(dJdw2):
-                self.weights[1][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdw3):
-                self.weights[2][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB1):
-                self.biases[0][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB2):
-                self.biases[1][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB3):
-                self.biases[2][i] -= learning_rate * deriv
+            for i, bias_gradient_scheme in enumerate(bias_gradients):
+                for j, bias_gradient in enumerate(bias_gradient_scheme):
+                    self.biases[i][j] -= learning_rate * bias_gradient
 
             if display:
                 plt.scatter(num, self.accuracy(X, y))
@@ -114,34 +108,27 @@ class neural_network(object):
         if display:
             plt.show()
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, regChange=0.01,
-              regularize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, reg_lambda=0.01, regularize=False):
         # neural net training
 
-        self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, regChange=regChange,
+        self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, reg_lambda=reg_lambda,
                              display=display, regularize=regularize)
 
-    def accuracy(self, X, y, string=False):
-        # produces the accuracy of neural net
-        errorCount = 0
-        yhat = self.predict(X)
-        for i, elem in enumerate(yhat):
-            if y[i][elem] != 1:
-                errorCount += 1
+        return 'accuracy:' + str(self.accuracy(X, y))
 
-        accuracy = 1.0 - errorCount / len(y)
+    def accuracy(self, X, y, string=False):
+        # evaluate neural network accuracy
+
+        yhat = self.predict(X)
+
+        count = 0
+        for i, target in enumerate(yhat):
+            if y[i][target] == 1:
+                count += 1
+
+        accuracy = count / len(y)
 
         if string:
-            print("accuracy: " + str(accuracy * 100.0) + "%")
+            return 'accuracy: ' + str(accuracy)
         else:
             return accuracy
-
-    def squared_error(self, X, y):
-        # produces the total squared error of neural net
-        error = 0.0
-        yHat = self.predict(X)
-        for i in range(len(yHat)):
-            error += ((y[i] - yHat[i]) ** 2) * 0.5
-
-        return error
-

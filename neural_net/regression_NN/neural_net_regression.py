@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
 
-class NeuralNetwork(object):
-
+class neural_network(object):
     def __init__(self, inputSize, outputSize, hidden1Size, hidden2Size):
 
         # layer sizes
@@ -13,18 +12,17 @@ class NeuralNetwork(object):
         self.hidden2Size = hidden2Size
 
         # initialize random primary weight and bias scheme
+        w1 = np.random.randn(self.inputSize, self.hidden1Size)
+        w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
+        w3 = np.random.randn(self.hidden2Size, self.outputSize)
 
-        self.w1 = np.random.randn(self.inputSize, self.hidden1Size)
-        self.w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
-        self.w3 = np.random.randn(self.hidden2Size, self.outputSize)
+        self.weights = np.array([w1, w2, w3])
 
-        self.weights = np.array([self.w1, self.w2, self.w3])
+        b1 = np.zeros(self.hidden1Size)
+        b2 = np.zeros(self.hidden2Size)
+        b3 = np.zeros(self.outputSize)
 
-        self.b1 = np.zeros(self.hidden1Size)
-        self.b2 = np.zeros(self.hidden2Size)
-        self.b3 = np.zeros(self.outputSize)
-
-        self.biases = np.array([self.b1, self.b2, self.b3])
+        self.biases = np.array([b1, b2, b3])
 
         # initialize forward propagation parameters to 0.0
         self.z2 = 0.0
@@ -35,7 +33,7 @@ class NeuralNetwork(object):
         self.a4 = 0.0
 
     def predict(self, X):
-        # feed forward data set X
+        # feed forward dataset X
         # assumes X is a numpy array, returns numpy array
         self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
         self.a2 = act.sigmoid(self.z2)
@@ -45,10 +43,10 @@ class NeuralNetwork(object):
         self.a4 = act.sigmoid(self.z4)
         return self.a4
 
-    def back_propagate(self, X, y):
+    def backPropagate(self, X, y):
 
-        # back propagation of value
-        yHat = self.predict(X)
+        # backpropagation of value
+        self.yHat = self.predict(X)
 
         delta4 = np.multiply(-(y - self.yHat),
                              act.sigmoid(self.z4, deriv=True))
@@ -61,41 +59,34 @@ class NeuralNetwork(object):
         dJdW1 = np.dot(X.T, delta2)
         dJdB1 = np.sum(delta2, axis=0)
 
-        return dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3
+        weight_gradients = np.array([dJdW1, dJdW2, dJdW3])
+        bias_gradients = np.array([dJdB1, dJdB2, dJdB3])
 
-    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.01, reg_lambda=0.01, display=False,
+        return weight_gradients, bias_gradients
+
+    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False,
                         regularize=False):
 
-        # train neural network
+        # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
 
             # calculate gradients
-            dJdW1, dJdW2, dJdW3, dJdB1, dJdB2, dJdB3 = self.back_propagate(X, y)
+            weight_gradients, bias_gradients = self.backPropagate(X, y)
 
             # train weights and biases
 
             if regularize:
-                self.weights[0] += regChange * self.weights[0]
-                self.weights[1] += regChange * self.weights[1]
-                self.weights[2] += regChange * self.weights[2]
+                for weight_sheme in self.weights:
+                    for weight in weight_sheme:
+                        weight += reg_lambda * weight
 
-            for i, deriv in enumerate(dJdW1):
-                self.weights[0][i] -= learning_rate * deriv
+            for i, weight_gradient_scheme in enumerate(weight_gradients):
+                for j, weight_gradient in enumerate(weight_gradient_scheme):
+                    self.weights[i][j] -= learning_rate * weight_gradient
 
-            for i, deriv in enumerate(dJdW2):
-                self.weights[1][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdW3):
-                self.weights[2][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB1):
-                self.biases[0][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB2):
-                self.biases[1][i] -= learning_rate * deriv
-
-            for i, deriv in enumerate(dJdB3):
-                self.biases[2][i] -= learning_rate * deriv
+            for i, bias_gradient_scheme in enumerate(bias_gradients):
+                for j, bias_gradient in enumerate(bias_gradient_scheme):
+                    self.biases[i][j] -= learning_rate * bias_gradient
 
             if display:
                 plt.scatter(num, self.accuracy(X, y))
@@ -103,19 +94,21 @@ class NeuralNetwork(object):
         if display:
             plt.show()
 
-
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, regChange=0.01, regularize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, reg_lambda=0.01, regularize=False):
         # neural net training
 
-        self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, regChange=regChange,
+        self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, reg_lambda=reg_lambda,
                              display=display, regularize=regularize)
+
+        return 'accuracy:' + str(self.accuracy(X, y))
 
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net
         yhat = self.predict(X)
-        error_difference = np.absolute(np.subtract(yhat, y))
-        error = np.absolute(np.divide(error_difference, y))
-        accuracy = 1.0 - (np.sum(error) / len(error))
+
+        error_sum = np.sum(np.absolute(np.subtract(yhat, y)))
+        y_sum = np.sum(np.absolute(y))
+        accuracy = 1.0 - error_sum / y_sum
 
         if string:
             print("accuracy: " + str(accuracy * 100.0) + "%")
