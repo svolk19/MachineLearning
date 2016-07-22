@@ -3,25 +3,26 @@ import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
 import neural_net.utils.gradient_descents as sgd
 
-class neural_network(object):
-    def __init__(self, inputSize, outputSize, hidden1Size, hidden2Size):
+
+class NeuralNetwork(object):
+    def __init__(self, input_size, output_size, hidden1_size, hidden2_size):
 
         # layer sizes
-        self.inputSize = inputSize
-        self.outputSize = outputSize
-        self.hidden1Size = hidden1Size
-        self.hidden2Size = hidden2Size
+        self.input_size = input_size
+        self.output_size = output_size
+        self.hidden1_size = hidden1_size
+        self.hidden2_size = hidden2_size
 
         # initialize random primary weight and bias scheme
-        w1 = np.random.randn(self.inputSize, self.hidden1Size)
-        w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
-        w3 = np.random.randn(self.hidden2Size, self.outputSize)
+        w1 = np.random.randn(self.input_size, self.hidden1_size)
+        w2 = np.random.randn(self.hidden1_size, self.hidden2_size)
+        w3 = np.random.randn(self.hidden2_size, self.output_size)
 
         self.weights = np.array([w1, w2, w3])
 
-        b1 = np.zeros(self.hidden1Size)
-        b2 = np.zeros(self.hidden2Size)
-        b3 = np.zeros(self.outputSize)
+        b1 = np.zeros(self.hidden1_size)
+        b2 = np.zeros(self.hidden2_size)
+        b3 = np.zeros(self.output_size)
 
         self.biases = np.array([b1, b2, b3])
 
@@ -34,8 +35,9 @@ class neural_network(object):
         self.a4 = 0.0
 
     def predict(self, X):
-        # feed forward dataset X
+        # feed forward data set X
         # assumes X is a numpy array, returns numpy array
+
         self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
         self.a2 = act.sigmoid(self.z2)
         self.z3 = np.dot(self.a2, self.weights[1]) + self.biases[1]
@@ -44,12 +46,12 @@ class neural_network(object):
         self.a4 = act.sigmoid(self.z4)
         return self.a4
 
-    def backPropagate(self, X, y):
+    def back_propagate(self, X, y):
 
-        # backpropagation of value
-        self.yHat = self.predict(X)
+        # back propagation of value
+        self.yhat = self.predict(X)
 
-        delta4 = np.multiply(-(y - self.yHat),
+        delta4 = np.multiply(-(y - self.yhat),
                              act.sigmoid(self.z4, deriv=True))
         dJdW3 = np.dot(self.a3.T, delta4)
         dJdB3 = np.sum(delta4, axis=0, keepdims=True)
@@ -66,7 +68,8 @@ class neural_network(object):
         return weight_gradients, bias_gradients
 
     def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False, regularize=False):
-        # train neural network until greater than or equal to 99.5% accuracy is achieved
+        # train neural network
+
         for num in range(iterations):
 
             # generate mini batches
@@ -75,7 +78,7 @@ class neural_network(object):
             for X_batch, y_batch in zip(X_batches, y_batches):
 
                 # calculate gradients
-                weight_gradients, bias_gradients = self.backPropagate(X_batch, y_batch)
+                weight_gradients, bias_gradients = self.back_propagate(X_batch, y_batch)
 
                 # train weights and biases
 
@@ -98,16 +101,15 @@ class neural_network(object):
         if display:
             plt.show()
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, reg_lambda=0.01, regularize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reg_lambda=0.01, regularize=False):
         # neural net training
 
         self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, reg_lambda=reg_lambda,
                              display=display, regularize=regularize)
 
-        return 'accuracy:' + str(self.accuracy(X, y))
-
     def accuracy(self, X, y, string=False):
         # produces the accuracy of neural net
+
         yhat = self.predict(X)
 
         error_sum = np.sum(np.absolute(np.subtract(yhat, y)))

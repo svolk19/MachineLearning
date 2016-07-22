@@ -1,10 +1,8 @@
-
+import neural_net.neural_net_regression as neural_net
 import numpy as np
-from sklearn import datasets
+from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split
-from sklearn import preprocessing
 import time
-import neural_net_regression as neural_net
 
 
 def boston_housing(NN):
@@ -24,12 +22,13 @@ def boston_housing(NN):
     y_train = preprocessing.normalize(y_train)
     y_test = preprocessing.normalize(y_test)
 
-    startTime = time.time()
+    start_time = time.time()
     NN.train(X_train, y_train, iterations=100, learning_rate=0.01, regularize=False, display=True)
-    endTime = time.time()
+    end_time = time.time()
 
-    totalTime = endTime - startTime
-    print(NN.accuracy(X_test, y_test), 'total time:', totalTime)
+    total_time = end_time - start_time
+    print(NN.accuracy(X_test, y_test), 'total time:', total_time)
+
 
 def diabetes_test(NN):
     data = datasets.load_diabetes()
@@ -48,16 +47,16 @@ def diabetes_test(NN):
     y_train = preprocessing.normalize(y_train)
     y_test = preprocessing.normalize(y_test)
 
-    startTime = time.time()
+    start_time = time.time()
     NN.train(X_train, y_train, iterations=100, learning_rate=0.001, regularize=False, reg_lambda=0.01, display=True)
-    endTime = time.time()
+    end_time = time.time()
 
 
-    totalTime = endTime - startTime
-    print('accuracy:' + str(NN.accuracy(X_test, y_test)) + '%\n' + 'total time: ' + str(totalTime))
+    total_time = end_time - start_time
+    print('accuracy:' + str(NN.accuracy(X_test, y_test)) + '%\n' + 'total time: ' + str(total_time))
 
 
-def Xor(NN):
+def xor(NN):
     # teach neural net Xor function
     X = np.array(([0, 0], [0, 1], [1, 0], [1, 1]), dtype=float)
     y = np.array(([0], [1], [1], [0]), dtype=float)

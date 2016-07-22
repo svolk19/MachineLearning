@@ -3,25 +3,26 @@ import matplotlib.pyplot as plt
 import neural_net.utils.activations as act
 import neural_net.utils.gradient_descents as sgd
 
+
 class NeuralNetwork(object):
-    def __init__(self, inputSize, outputSize, hidden1Size, hidden2Size):
+    def __init__(self, input_size, output_size, hidden1_size, hidden2_size):
 
         # layer sizes
-        self.inputSize = inputSize
-        self.outputSize = outputSize
-        self.hidden1Size = hidden1Size
-        self.hidden2Size = hidden2Size
+        self.input_size = input_size
+        self.output_size = output_size
+        self.hidden1_size = hidden1_size
+        self.hidden2_size = hidden2_size
 
         # initialize random primary weight and bias scheme
-        w1 = np.random.randn(self.inputSize, self.hidden1Size)
-        w2 = np.random.randn(self.hidden1Size, self.hidden2Size)
-        w3 = np.random.randn(self.hidden2Size, self.outputSize)
+        w1 = np.random.randn(self.input_size, self.hidden1_size)
+        w2 = np.random.randn(self.hidden1_size, self.hidden2_size)
+        w3 = np.random.randn(self.hidden2_size, self.output_size)
 
         self.weights = np.array([w1, w2, w3])
 
-        b1 = np.zeros(self.hidden1Size)
-        b2 = np.zeros(self.hidden2Size)
-        b3 = np.zeros(self.outputSize)
+        b1 = np.zeros(self.hidden1_size)
+        b2 = np.zeros(self.hidden1_size)
+        b3 = np.zeros(self.output_size)
 
         self.biases = np.array([b1, b2, b3])
 
@@ -34,7 +35,7 @@ class NeuralNetwork(object):
         self.a4 = 0.0
 
     def predict(self, X):
-        # feed forward dataset X
+        # feed forward data set X
         # assumes X is a numpy array, returns numpy array
         self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
         self.a2 = act.sigmoid(self.z2)
@@ -45,8 +46,7 @@ class NeuralNetwork(object):
         probabilities = results / np.sum(results, axis=1, keepdims=True)
         return np.argmax(probabilities, axis=1)
 
-    def forwardPropagate(self, X):
-
+    def forward_propagate(self, X):
         # feed forward data set X
         # assumes X is a numpy array, returns numpy array
 
@@ -59,11 +59,10 @@ class NeuralNetwork(object):
         probabilities = results / np.sum(results, axis=1, keepdims=True)
         return probabilities
 
-    def backPropagate(self, X, y):
+    def back_propagate(self, X, y):
+        # back propagation of value X
 
-        # backpropagation of value X
-        num_examples = len(X)
-        yhat = self.forwardPropagate(X)
+        yhat = self.forward_propagate(X)
         delta4 = -1.0 * (y - yhat)
         dJdW3 = np.dot(self.a3.T, delta4)
         dJdB3 = np.sum(delta4, axis=0)
@@ -91,7 +90,7 @@ class NeuralNetwork(object):
             for X_batch, y_batch in zip(X_batches, y_batches):
 
                 # calculate gradients
-                weight_gradients, bias_gradients = self.backPropagate(X_batch, y_batch)
+                weight_gradients, bias_gradients = self.back_propagate(X_batch, y_batch)
 
                 # train weights and biases
 
@@ -114,7 +113,7 @@ class NeuralNetwork(object):
         if display:
             plt.show()
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reinitialize=False, reg_lambda=0.01,
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reg_lambda=0.01,
               batch_size=10, regularize=False):
         # neural net training
 

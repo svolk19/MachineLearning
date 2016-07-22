@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def mini_batch_generate(X, y, batch_size, randomize=True):
     # yields mini batches of training data to perform stochastic gradient descent
 
@@ -8,18 +9,16 @@ def mini_batch_generate(X, y, batch_size, randomize=True):
     if randomize:
         np.random.shuffle(index_array)
 
-
-    indicies = []
+    indices = []
     for start_index in range(0, len(index_array) - batch_size + 1, batch_size):
-        indicies.append(index_array[start_index:start_index + batch_size])
+        indices.append(index_array[start_index:start_index + batch_size])
 
-    indicies = np.array(indicies)
+    indices = np.array(indices)
 
-    X_batches = np.empty((len(indicies), batch_size, len(X[0])))
-    y_batches = np.empty((len(indicies), batch_size, len(y[0])))
+    X_batches = np.empty((len(indices), batch_size, len(X[0])))
+    y_batches = np.empty((len(indices), batch_size, len(y[0])))
 
-
-    for i, indexes in enumerate(indicies):
+    for i, indexes in enumerate(indices):
         for j, index in enumerate(indexes):
             X_batches[i][j] = X[index]
             y_batches[i][j] = y[index]
