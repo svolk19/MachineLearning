@@ -78,6 +78,8 @@ class NeuralNetwork(object):
 
         for num in range(iterations):
 
+            learning_rate = self.assign_rate(X, y, learning_rate)
+
             # generate mini batches
             X_batches, y_batches = sgd.mini_batch_generate(X, y, 10)
 
@@ -135,3 +137,14 @@ class NeuralNetwork(object):
             error += ((y[i] - yHat[i]) ** 2) * 0.5
 
         return error
+
+    def assign_rate(self, X, y, learning_rate):
+        # assign a learning rate based on neural network accuracy
+        # new learning rate is based on the tangent of the current accuracy
+
+        accuracy = self.accuracy(X, y)
+        accuracy_normalized = self.tan_normalize(accuracy)
+        learning_rate -= np.tan(accuracy_normalized)
+
+        return learning_rate
+

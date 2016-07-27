@@ -23,3 +23,5 @@ def softmax(X, predict=False):
         return np.argmax(results, axis=1)
     else:
         return results
+
+

@@ -90,6 +90,7 @@ class NeuralNetwork(object):
 
         # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
+            print(0)
 
             # generate mini batches
             X_batches, y_batches = sgd.mini_batch_generate(X, y, batch_size)
@@ -147,7 +148,7 @@ class NeuralNetwork(object):
     def cross_entropy_loss(self, X, y):
         # return cross entropy loss
 
-        yhat = self.predict(X)
+        yhat = self.forward_propagate(X)
 
         error = log_loss(y, yhat)
         return error

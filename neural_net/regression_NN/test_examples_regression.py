@@ -65,5 +65,5 @@ def xor(NN):
     return NN.accuracy(X, y, string=True)
 
 if __name__ == '__main__':
-    NN = neural_net.NeuralNetwork(10, 1, 13, 12)
-    diabetes_test(NN)
+    NN = neural_net.NeuralNetwork(13, 1, 10, 10)
+    boston_housing(NN)
