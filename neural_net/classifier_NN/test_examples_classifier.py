@@ -3,7 +3,6 @@ from sklearn import datasets
 from sklearn.cross_validation import train_test_split
 from sklearn import preprocessing
 import numpy as np
-import pylab as pl
 
 
 def iris(NN):
@@ -51,6 +50,7 @@ def iris(NN):
     NN.train(X_train, y_train, learning_rate=0.001, iterations=1000, regularize=False, display=True)
     print(NN.accuracy(X_test, y_test))
 
+
 def digits(NN):
     # hand written digit test data classification problem from sklearn
 
@@ -77,7 +77,7 @@ def digits(NN):
     y_train = y_train_class_array.reshape((1257, 10))
     y_test = y_test_class_array.reshape((540, 10))
 
-    NN.train(X_train, y_train, learning_rate=0.01, iterations=1000, regularize=False, display=True)
+    NN.train(X_train, y_train, learning_rate=0.01, iterations=100, regularize=False, display=True)
     print(NN.accuracy(X_test, y_test))
 
 

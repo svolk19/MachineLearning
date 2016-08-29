@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def sigmoid(X, deriv=False):
     # activation function at each neuron: tanh
     # assumes X is a numpy array

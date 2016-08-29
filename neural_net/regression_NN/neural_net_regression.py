@@ -138,13 +138,13 @@ class NeuralNetwork(object):
 
         return error
 
-    def assign_rate(self, X, y, learning_rate):
-        # assign a learning rate based on neural network accuracy
-        # new learning rate is based on the tangent of the current accuracy
-
-        accuracy = self.accuracy(X, y)
-        accuracy_normalized = self.tan_normalize(accuracy)
-        learning_rate -= np.tan(accuracy_normalized)
-
-        return learning_rate
-
+    # def assign_rate(self, X, y, learning_rate):
+    #     # assign a learning rate based on neural network accuracy
+    #     # new learning rate is based on the tangent of the current accuracy
+    #
+    #     accuracy = self.accuracy(X, y)
+    #     accuracy_normalized = self.tan_normalize(accuracy)
+    #     learning_rate -= np.tan(accuracy_normalized)
+    #
+    #     return learning_rate
+    #
