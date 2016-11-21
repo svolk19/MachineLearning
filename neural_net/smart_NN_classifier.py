@@ -1,4 +1,3 @@
-import argparse
 import neural_net.utils.csv_reader as csv
 import numpy as np
 import neural_net.classifier_NN.neural_net_classifier as neural_net
@@ -55,23 +54,12 @@ def NN_train(labels, data):
     y_test = np.array(y_testList)
     y_test.reshape((len(y_testList), len(class_list)))
 
-    NN = neural_net.NeuralNetwork(len(data[0]), len(get_classes(labels)), 10, 10)
-    NN.train(X_train, y_train, learning_rate=0.001, iterations=1000, regularize=False, display=True)
+    NN = neural_net.NeuralNetwork(len(data[0]), len(get_classes(labels)), 13, 13)
+    NN.train(X_train, y_train, learning_rate=0.01, iterations=1000, display=True)
     print(NN.accuracy(X_test, y_test))
 
 
 def main():
-    # # parse command line arguments
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('csvFilepath', metavar='f', type=str,
-    #                     help='a csv file to train')
-    # parser.add_argument('indexLocation', metavar='l', type=int,
-    #                     help='the index location of the label column in the specified file')
-    #
-    # args = parser.parse_args()
-    #
-    # # import data, labels from csv file
-
     csv_filepath = "C:/Users/sam/Desktop/breast_cancer_wisconsin.csv"
     index_location = 10
 

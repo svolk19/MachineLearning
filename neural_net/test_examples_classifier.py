@@ -1,4 +1,4 @@
-import neural_net.classifier_NN.neural_net_classifier as neural_net
+import neural_net_classifier as neural_net
 from sklearn import datasets
 from sklearn.cross_validation import train_test_split
 from sklearn import preprocessing
@@ -84,5 +84,5 @@ def digits(NN):
 if __name__ == '__main__':
     print('----------------\n' + 'process started\n' + '----------------\n')
 
-    NN = neural_net.NeuralNetwork(64, 10, 15, 15)
-    digits(NN)
+    NN = neural_net.NeuralNetwork(4, 3, 15, 15)
+    iris(NN)

@@ -1,4 +1,4 @@
-import neural_net.regression_NN.neural_net_regression as neural_net
+import neural_net_regression as neural_net
 import numpy as np
 from sklearn import datasets, preprocessing
 from sklearn.cross_validation import train_test_split

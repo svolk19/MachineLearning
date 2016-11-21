@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import neural_net.utils.activations as act
-import neural_net.utils.gradient_descents as sgd
+from utils import activations as act
+import utils.gradient_descents as sgd
+from sklearn.metrics import log_loss
 
 
 class NeuralNetwork(object):
@@ -21,7 +22,7 @@ class NeuralNetwork(object):
         self.weights = np.array([w1, w2, w3])
 
         b1 = np.zeros(self.hidden1_size)
-        b2 = np.zeros(self.hidden2_size)
+        b2 = np.zeros(self.hidden1_size)
         b3 = np.zeros(self.output_size)
 
         self.biases = np.array([b1, b2, b3])
@@ -37,24 +38,35 @@ class NeuralNetwork(object):
     def predict(self, X):
         # feed forward data set X
         # assumes X is a numpy array, returns numpy array
+        self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
+        self.a2 = act.sigmoid(self.z2)
+        self.z3 = np.dot(self.a2, self.weights[1]) + self.biases[1]
+        self.a3 = act.sigmoid(self.z3)
+        self.z4 = np.dot(self.a3, self.weights[2]) + self.biases[2]
+        results = np.exp(self.z4)
+        probabilities = results / np.sum(results, axis=1, keepdims=True)
+        return np.argmax(probabilities, axis=1)
+
+    def forward_propagate(self, X):
+        # feed forward data set X
+        # assumes X is a numpy array, returns numpy array
 
         self.z2 = np.dot(X, self.weights[0]) + self.biases[0]
         self.a2 = act.sigmoid(self.z2)
         self.z3 = np.dot(self.a2, self.weights[1]) + self.biases[1]
         self.a3 = act.sigmoid(self.z3)
         self.z4 = np.dot(self.a3, self.weights[2]) + self.biases[2]
-        self.a4 = act.sigmoid(self.z4)
-        return self.a4
+        results = np.exp(self.z4)
+        probabilities = results / np.sum(results, axis=1, keepdims=True)
+        return probabilities
 
     def back_propagate(self, X, y):
+        # back propagation of value X
 
-        # back propagation of value
-        self.yhat = self.predict(X)
-
-        delta4 = np.multiply(-(y - self.yhat),
-                             act.sigmoid(self.z4, deriv=True))
+        yhat = self.forward_propagate(X)
+        delta4 = -1.0 * (y - yhat)
         dJdW3 = np.dot(self.a3.T, delta4)
-        dJdB3 = np.sum(delta4, axis=0, keepdims=True)
+        dJdB3 = np.sum(delta4, axis=0)
         delta3 = np.dot(delta4, self.weights[2].T) * act.sigmoid(self.z3, deriv=True)
         dJdW2 = np.dot(self.a2.T, delta3)
         dJdB2 = np.sum(delta3, axis=0)
@@ -67,21 +79,20 @@ class NeuralNetwork(object):
 
         return weight_gradients, bias_gradients
 
-    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False, regularize=False):
-        # train neural network
+    def gradient_adjust(self, X, y, iterations=1000, learning_rate=0.5, reg_lambda=0.01, display=False,
+                        regularize=False, batch_size=10):
 
         if display:
             ax = plt.gca()
             ax.set_title('Gradient Descent', fontsize=28)
             plt.xlabel('number of iterations', fontsize=18)
-            plt.ylabel('squared error', fontsize=18)
+            plt.ylabel('cross entropy loss', fontsize=18)
 
+        # train neural network until greater than or equal to 99.5% accuracy is achieved
         for num in range(iterations):
-
-            learning_rate = self.assign_rate(X, y, learning_rate)
-
+            print(0)
             # generate mini batches
-            X_batches, y_batches = sgd.mini_batch_generate(X, y, 10)
+            X_batches, y_batches = sgd.mini_batch_generate(X, y, batch_size)
 
             for X_batch, y_batch in zip(X_batches, y_batches):
 
@@ -104,47 +115,39 @@ class NeuralNetwork(object):
                         self.biases[i][j] -= learning_rate * bias_gradient
 
             if display:
-                ax.scatter(num, self.squared_error(X, y))
+                plt.scatter(num, self.cross_entropy_loss(X, y))
 
         if display:
             plt.show()
 
-    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reg_lambda=0.01, regularize=False):
+    def train(self, X, y, iterations=1000, learning_rate=0.5, display=False, reg_lambda=0.01,
+              batch_size=10, regularize=False):
         # neural net training
 
         self.gradient_adjust(X, y, iterations=iterations, learning_rate=learning_rate, reg_lambda=reg_lambda,
-                             display=display, regularize=regularize)
+                             display=display, regularize=regularize, batch_size=batch_size)
 
     def accuracy(self, X, y, string=False):
-        # produces the accuracy of neural net
+        # evaluate neural network accuracy
 
         yhat = self.predict(X)
 
-        error_sum = np.sum(np.absolute(np.subtract(yhat, y)))
-        y_sum = np.sum(np.absolute(y))
-        accuracy = 1.0 - error_sum / y_sum
+        count = 0
+        for i, target in enumerate(yhat):
+            if y[i][target] == 1:
+                count += 1
+
+        accuracy = count / len(y)
 
         if string:
-            print("accuracy: " + str(accuracy * 100.0) + "%")
+            return 'accuracy: ' + str(accuracy)
         else:
             return accuracy
 
-    def squared_error(self, X, y):
-        # produces the total squared error of neural net
-        error = 0.0
-        yHat = self.predict(X)
-        for i in range(len(yHat)):
-            error += ((y[i] - yHat[i]) ** 2) * 0.5
+    def cross_entropy_loss(self, X, y):
+        # return cross entropy loss
 
+        yhat = self.forward_propagate(X)
+
+        error = log_loss(y, yhat)
         return error
-
-    # def assign_rate(self, X, y, learning_rate):
-    #     # assign a learning rate based on neural network accuracy
-    #     # new learning rate is based on the tangent of the current accuracy
-    #
-    #     accuracy = self.accuracy(X, y)
-    #     accuracy_normalized = self.tan_normalize(accuracy)
-    #     learning_rate -= np.tan(accuracy_normalized)
-    #
-    #     return learning_rate
-    #
